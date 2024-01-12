@@ -1,0 +1,108 @@
+---
+title: "1_quanlity_control"
+output: html_document
+date: "2024-01-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## WPS data RNAi Quality Control (QC)
+
+In this tutorial, we introduce the first and most important QC step for standard WPS application, the QC of RNAi identity and efficiency. For WPS applications that do not use RNAi (e.g., on chemical exposures), please skip the RNAi QC and only run a data filtering following the last section of this tutorial.
+
+## Standard WPS application
+
+### Running QC
+
+For standard WPS application, the treatment is to knock down *C. elegans* genes following our protocol. Each RNAi plate contains \~96 RNAi conditions and these RNAi conditions are experimented in triplicates, yielding \~300 samples. These samples are pooled into 6 sequencing libraries, with each containing \~16 RNAi conditions in triplicate and 6 vector controls.
+
+After generating the metadata tables and read count tables (see /step1_process_raw_data/), run the following codes to produce the QC figures for manual inspection.
+
+```{r}
+source('RNAi_QC_functions.R')
+
+# we use met7 as an example
+exps = c('met7')
+libs = c('lib1','lib2','lib3','lib4','lib5','lib6')
+# include the sample names for the six vector controls
+vectorSamples = c('x.vector_well1_rep1','x.vector_well1_rep2','x.vector_well1_rep3',
+                    'x.vector_well2_rep1','x.vector_well2_rep2','x.vector_well2_rep3')
+# set the total depth of the control bam file 
+ctr_bam_depth = 318270479 
+# as we used the developmental stage library as control, the control library total depth is a constant (the depth of the developmental stage library, based on the bam file we used for routine dsRNA correction background)
+
+
+# loop through each plate and then each library 
+for (expID in exps){
+  for (libID in libs){
+    RNAi_QC(expID,libID, vectorSamples, 'before_cleaning', ctr_bam_depth)
+  }
+}
+```
+
+### Inspecting QC results
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+
+# check how many sample remains after QC 
+libs = c('lib1','lib2','lib3','lib4','lib5','lib6')
+exps = c('met1','met2','met3','met4','met5','met6','met7','met8','met9','met10','met11','met13')
+skipLib = c('') # no vector, we dont analyze 
+N_sample_total = 0
+N_sample_LOW = 0
+N_sample_SHORT = 0
+N_sample_VECTORLIKE = 0
+N_sample_RCBVECTOR = 0
+N_sample_MULTIPLE = 0
+N_sample_NOSIGNAL = 0
+for (expID in exps){
+  for (libID in libs){
+    if(!(paste(expID,libID,sep = '-') %in% skipLib)){
+      load(paste("./outputs/TPM_preserved_",expID,'_',libID,".RData",sep = ''))
+      N_sample_total = N_sample_total + ncol(readsCount)
+      N_sample_LOW = N_sample_LOW + sum(str_detect(colnames(readsCount),'^x.LOWDEPTH_'))
+      N_sample_SHORT = N_sample_SHORT + sum(str_detect(colnames(readsCount),'^x.SHORT_'))
+      N_sample_VECTORLIKE = N_sample_VECTORLIKE + sum(str_detect(colnames(readsCount),'^x.VECTORLIKE_'))
+      N_sample_RCBVECTOR = N_sample_RCBVECTOR + sum(str_detect(colnames(readsCount),'^x.RCBVECTOR_'))
+      N_sample_MULTIPLE = N_sample_MULTIPLE + sum(str_detect(colnames(readsCount),'^x.MULTIPLE_'))
+      N_sample_NOSIGNAL = N_sample_NOSIGNAL + sum(str_detect(colnames(readsCount),'^x.NOSIGNAL_'))
+    }
+  }
+}
+N_sample_total
+N_sample_LOW
+N_sample_SHORT 
+N_sample_VECTORLIKE 
+N_sample_RCBVECTOR 
+N_sample_MULTIPLE 
+N_sample_NOSIGNAL 
+N_sample_pass = N_sample_total - N_sample_LOW - N_sample_SHORT - N_sample_VECTORLIKE - N_sample_RCBVECTOR - N_sample_MULTIPLE - N_sample_NOSIGNAL
+N_sample_pass
+N_sample_pass/N_sample_total
+
+N_sample_useful = N_sample_total - N_sample_LOW - N_sample_VECTORLIKE - N_sample_RCBVECTOR  - N_sample_NOSIGNAL
+N_sample_useful
+N_sample_useful/N_sample_total
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Repeat step 1 XX and the above while changing ... Save QC results in a new folder (xx) and repeat
+
+```{r}
+
+# repeat using the updated RNAi QC output files
+for (expID in exps){
+  for (libID in libs){
+    RNAi_QC(expID,libID, vectorSamples, 'after_cleaning', ctr_bam_depth)
+  }
+}
+```
+
+Now, figures are final
+
+### Custom WPS application

@@ -1,0 +1,122 @@
+---
+title: "Prepare the input metadata tables for downstream processing"
+output: html_document
+date: "2024-01-11"
+author: "Xuhang Li"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description
+
+This is a walkthrough for the first step of WPS data processing, to prepare the required tables for downstream processing. As a showcase, here we process the data from one 96-well RNAi plate experiment (triplicates). We use the metabolic RNAi plate #7 (met7) in this tutorial.
+
+## Procedure
+
+### The sample information table
+
+First, prepare a WPS sample information table following the sample table:
+
+```{r}
+InfoTbl_all = read.csv('./../data/metaData/Met7 barcode_ori.csv')
+
+# if any wrong RNAi is identified by the QC, confirm with Sanger sequencing, 
+# then update the sample sheet and repeat this process using the following code. 
+
+# InfoTbl_all = read.csv('./../data/metaData/Met7 barcode.csv')
+
+head(InfoTbl_all)
+```
+
+This table should be constructed when designing the experiment. The layout should be straightforward and self-explanatory. Please make sure it contains one column for the barcode information ('barcode_Seq') and sample names arranged by sequencing library (each column is one library).
+
+For standard WPS that involves RNAi QC, the samples should be named after *geneName_replicateID* (e.g., acdh-1_rep1). For other custom applications (e.g., a screen of chemicals), please format the sample names in your own way and skip the RNAi QC procedures.
+
+### Produce formatted tables
+
+This following codes give a simple wrapper to convert the human-readable sample information table we constructed into a few input tables that are formatted for machine-readable use. It produces three tables: a sample sheet (*sampleSheet*) that assigns barcodes to samples for downstream analysis using R; an RNAi barcode sheet (*RNAiBCsheet*) and a reformatted sample sheet (*bcTable*) for dsRNA analysis using Python.
+
+```{r}
+library(stringr)
+# load the WBID lookup table
+WBID = read.table('./../data/metaData/WBIDtbl.txt',header = T,sep = '\t')
+# load a list of metabolic genes
+# In our study, we only search metabolic genes for potential dsRNA signals. Users can extend it to all possible genes in thier library or the entire genome. 
+allmetGenes = read.csv('./../data/metaData/allMetGenes.txt')
+
+# loop through each library in met7
+plateID = 7
+for (libID in 1:6){
+  # prepare the files for each library 
+  InfoTbl = InfoTbl_all[,c('barcode_Seq',paste('met',plateID,'.lib',libID,sep = ''))]
+  colnames(InfoTbl) = c('barcode_Seq','sample_name')
+  # extract the targeted gene information from sample name
+  InfoTbl$RNAi = str_replace(InfoTbl$sample_name,'_....$','')
+  InfoTbl$RNAi = str_replace(InfoTbl$RNAi,' .+$','')
+  InfoTbl$WBID = WBID$WormBase.Gene.ID[match(InfoTbl$RNAi,WBID$Public.Name)]
+  
+  # make sure every targeted gene can be matched to a WBID to eliminate typos in the sample table 
+    cat('In plate#',plateID,'-lib#',libID,', these samples cannot be matched to a targeted gene based on the gene name:\n', paste(setdiff(InfoTbl$sample_name[is.na(InfoTbl$WBID)],''),collapse = '\n'),'\n',sep = '')
+  
+  # (1) make the RNAiBCsheet 
+  RNAi = unique(setdiff(unlist(strsplit(unique(InfoTbl$WBID),'_')),NA))
+  RNAiBCsheet = data.frame(WBID = RNAi, rep1 = NA, rep2 = NA, rep3 = NA, rep4 = NA, rep5 = NA, rep6 = NA)
+  for (i in 1:length(RNAi)){
+    for (j in 1:length(InfoTbl$barcode_Seq[which(str_detect(InfoTbl$WBID,RNAi[i]))])){
+      RNAiBCsheet[i,j+1] = InfoTbl$barcode_Seq[which(str_detect(InfoTbl$WBID,RNAi[i]))][j]
+    }
+  }
+  # add other genes to search for dsRNA signals (all other metabolic genes)
+  otherMets = setdiff(allmetGenes$WBName,RNAiBCsheet$WBID)
+  RNAiBCsheet = rbind(RNAiBCsheet, data.frame(WBID = otherMets, rep1 = 'X', rep2 = 'X', rep3 = 'X',
+                                              rep4 = 'X', rep5 = 'X', rep6 = 'X')) 
+  
+  
+  # (2) make bcTable 
+  samples = InfoTbl$sample_name
+  # format the gene names
+  for (i in 1:length(samples)){
+    samples[i] = str_replace(samples[i],'-','_')
+  }
+  # adding prefix'x' to avoid invalid column names in R
+  samples = paste('x.',str_replace(samples,' +','_'),sep = '') 
+  # avoiding '.' in the names that causes bugs in Python 
+  samples_python = str_replace_all(samples,'\\.','_')
+  # skip empty BCs
+  emt = InfoTbl$sample_name == ''
+  bcTable = data.frame(sampleName = samples_python[!emt], bc = InfoTbl$barcode_Seq[!emt])
+  # make sampleSheet 
+  sampleSheet = data.frame(bc = InfoTbl$barcode_Seq[!emt], sampleName = samples[!emt])
+  
+  
+  # save tables
+  write.table(x = RNAiBCsheet,file = paste('./../data/RNAiBCsheets/RNAiBCsheet_met',plateID,'_lib',libID,'.csv',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  write.table(x = bcTable,file =  paste('./../data/RNAiBCsheets/bcTable_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ':',row.names = F,col.names = F)
+  write.table(x = sampleSheet,file = paste('./../data/sampleSheets/sampleSheet_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  
+}  
+```
+
+This wrapper code produces three tables:
+
+(1) sample sheet: a table with two columns defining the formatted, machine-friendly sample name for each barcode.
+
+```{r}
+head(sampleSheet)
+```
+
+(2) barcode table: This is the same table as the sample sheet, except for reversing the order of columns and using ":" as deliminator when writing out the table. This special format is required to run the dsRNA analysis Python script for a historical reason.
+
+```{r}
+head(bcTable)
+```
+
+(3) RNAi barcode sheet: This is a reformatted sample sheet that matches RNAi targeted gene (using WBID) with barcodes, where replicates are listed in columns. This special format is required to run the dsRNA analysis Python script for a historical reason.
+
+```{r}
+head(RNAiBCsheet)
+```
+
+In the dsRNA analysis, genes with assigned barcodes will be analyzed for reads that mapped to the reverse strand of these genes and that coded with these barcodes. Genes with empty barcodes will be analyzed for any reads mapped to the reverse strand of these genes in the sequencing library. This list of genes beyond the library genes is used for searching potential cross contamination or sample swap in the dataset, based on the dsRNA signals.
