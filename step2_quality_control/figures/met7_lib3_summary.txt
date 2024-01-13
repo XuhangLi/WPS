@@ -1,26 +1,26 @@
-these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): pck-1, gale-1, gyg-2, tre-2, ZK632.4, dlat-2, pfkb-1.2, tpi-1, F07A11.5, C50D2.7, pgph-3
-these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): glod-4, tre-5, gsy-1
+these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): pck-1, ipgm-1, gale-1, gyg-2, tre-2, ZK632.4, dlat-2, pfkb-1.2, tpi-1, F07A11.5, C50D2.7, pgph-3
+these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): 
 depth of these samples is less than 3 mil: x.C50D2.7_rep3
 sample    depth
 x.pck_3_rep2    11.665071
 x.vector_well1_rep2    9.107903
-x.glod_4_rep2    8.608402
+x.ipgm_1_rep2    8.608402
 x.gale_1_rep2    8.465952
 x.Y47D9A.1_rep2    8.411033
 x.tre_2_rep2    8.069353
 x.vector_well1_rep1    7.843762
-x.tre_5_rep2    7.715788
+x.polg_1_rep2    7.715788
 x.dlat_2_rep2    7.696728
 x.tre_2_rep3    7.290991
 x.pck_3_rep3    7.135146
 x.gale_1_rep3    6.765901
 x.vector_well2_rep3    6.755194
-x.gsy_1_rep2    6.745188
+x.VECTORLIKE_gsy_1_rep2    6.745188
 x.F07A11.5_rep2    6.512989
 x.pck_1_rep2    6.408533
 x.Y47D9A.1_rep1    6.40119
 x.vector_well1_rep3    6.35262
-x.tre_5_rep3    6.339705
+x.polg_1_rep3    6.339705
 x.C50D2.7_rep2    6.316856
 x.vector_well2_rep1    6.103934
 x.pfkb_1.2_rep2    6.031779
@@ -32,16 +32,16 @@ x.tre_2_rep1    5.405751
 x.Y47D9A.1_rep3    5.285756
 x.pgph_3_rep3    5.248643
 x.dlat_2_rep3    5.216203
-x.tre_5_rep1    5.167707
-x.glod_4_rep1    5.1257
+x.polg_1_rep1    5.167707
+x.ipgm_1_rep1    5.1257
 x.ZK632.4_rep3    5.117717
 x.F07A11.5_rep3    5.076007
 x.pfkb_1.2_rep3    5.05142
 x.pgph_3_rep1    4.985858
 x.F07A11.5_rep1    4.89432
 x.pck_3_rep1    4.642785
-x.gsy_1_rep3    4.52114
-x.gsy_1_rep1    4.362987
+x.VECTORLIKE_gsy_1_rep3    4.52114
+x.VECTORLIKE_gsy_1_rep1    4.362987
 x.gyg_2_rep1    4.321395
 x.pck_1_rep3    4.282064
 x.gyg_2_rep3    4.087532
@@ -51,7 +51,7 @@ x.dlat_2_rep1    3.839383
 x.pfkb_1.2_rep1    3.510766
 x.C50D2.7_rep1    3.493752
 x.vector_well2_rep2    3.452946
-x.glod_4_rep3    3.380767
+x.ipgm_1_rep3    3.380767
 x.gale_1_rep1    3.254434
 x.pck_1_rep1    3.103957
 x.ZK632.4_rep1    3.010017

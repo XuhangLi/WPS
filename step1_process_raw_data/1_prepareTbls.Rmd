@@ -20,12 +20,8 @@ This is a walkthrough for the first step of WPS data processing, to prepare the 
 First, prepare a WPS sample information table following the sample table:
 
 ```{r}
+# load meta data tables 
 InfoTbl_all = read.csv('./../data/metaData/Met7 barcode_ori.csv')
-
-# if any wrong RNAi is identified by the QC, confirm with Sanger sequencing, 
-# then update the sample sheet and repeat this process using the following code. 
-
-# InfoTbl_all = read.csv('./../data/metaData/Met7 barcode.csv')
 
 head(InfoTbl_all)
 ```
@@ -45,6 +41,13 @@ WBID = read.table('./../data/metaData/WBIDtbl.txt',header = T,sep = '\t')
 # load a list of metabolic genes
 # In our study, we only search metabolic genes for potential dsRNA signals. Users can extend it to all possible genes in thier library or the entire genome. 
 allmetGenes = read.csv('./../data/metaData/allMetGenes.txt')
+
+if (!dir.exists('./../data/RNAiBCsheets_before_cleaning')){
+  dir.create('./../data/RNAiBCsheets_before_cleaning')
+}
+if (!dir.exists('./../data/sampleSheets_before_cleaning')){
+  dir.create('./../data/sampleSheets_before_cleaning')
+}
 
 # loop through each library in met7
 plateID = 7
@@ -92,9 +95,9 @@ for (libID in 1:6){
   
   
   # save tables
-  write.table(x = RNAiBCsheet,file = paste('./../data/RNAiBCsheets/RNAiBCsheet_met',plateID,'_lib',libID,'.csv',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
-  write.table(x = bcTable,file =  paste('./../data/RNAiBCsheets/bcTable_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ':',row.names = F,col.names = F)
-  write.table(x = sampleSheet,file = paste('./../data/sampleSheets/sampleSheet_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  write.table(x = RNAiBCsheet,file = paste('./../data/RNAiBCsheets_before_cleaning/RNAiBCsheet_met',plateID,'_lib',libID,'.csv',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  write.table(x = bcTable,file =  paste('./../data/RNAiBCsheets_before_cleaning/bcTable_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ':',row.names = F,col.names = F)
+  write.table(x = sampleSheet,file = paste('./../data/sampleSheets_before_cleaning/sampleSheet_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
   
 }  
 ```
@@ -120,3 +123,126 @@ head(RNAiBCsheet)
 ```
 
 In the dsRNA analysis, genes with assigned barcodes will be analyzed for reads that mapped to the reverse strand of these genes and that coded with these barcodes. Genes with empty barcodes will be analyzed for any reads mapped to the reverse strand of these genes in the sequencing library. This list of genes beyond the library genes is used for searching potential cross contamination or sample swap in the dataset, based on the dsRNA signals.
+
+## Rerunning with updated metadata
+
+WPS data QC involves an iterative check-update-check cycle. With the original metadata annotation, we run the QC pipeline to identify any potential bad RNAi clones. These clones are further validated with Sanger sequencing, and then their identity information will be updated. Once the metadata information is updated, one needs to rerun the QC pipeline to produce the final QC figures and metrics.
+
+The following code is to rerun with updated barcode table. Proceed with the first round of QC is finished!
+
+```{r}
+library(stringr)
+
+# load the updated bc table
+InfoTbl_all = read.csv('./../data/metaData/Met7 barcode.csv')
+
+# the same code as previous except for the change of folder name
+
+# load the WBID lookup table
+WBID = read.table('./../data/metaData/WBIDtbl.txt',header = T,sep = '\t')
+# load a list of metabolic genes
+# In our study, we only search metabolic genes for potential dsRNA signals. Users can extend it to all possible genes in thier library or the entire genome. 
+allmetGenes = read.csv('./../data/metaData/allMetGenes.txt')
+
+if (!dir.exists('./../data/RNAiBCsheets_after_cleaning')){
+  dir.create('./../data/RNAiBCsheets_after_cleaning')
+}
+if (!dir.exists('./../data/sampleSheets_after_cleaning')){
+  dir.create('./../data/sampleSheets_after_cleaning')
+}
+
+# loop through each library in met7
+plateID = 7
+for (libID in 1:6){
+  # prepare the files for each library 
+  InfoTbl = InfoTbl_all[,c('barcode_Seq',paste('met',plateID,'.lib',libID,sep = ''))]
+  colnames(InfoTbl) = c('barcode_Seq','sample_name')
+  # extract the targeted gene information from sample name
+  InfoTbl$RNAi = str_replace(InfoTbl$sample_name,'_....$','')
+  InfoTbl$RNAi = str_replace(InfoTbl$RNAi,' .+$','')
+  InfoTbl$WBID = WBID$WormBase.Gene.ID[match(InfoTbl$RNAi,WBID$Public.Name)]
+  
+  # make sure every targeted gene can be matched to a WBID to eliminate typos in the sample table 
+    cat('In plate#',plateID,'-lib#',libID,', these samples cannot be matched to a targeted gene based on the gene name:\n', paste(setdiff(InfoTbl$sample_name[is.na(InfoTbl$WBID)],''),collapse = '\n'),'\n',sep = '')
+  
+  # (1) make the RNAiBCsheet 
+  RNAi = unique(setdiff(unlist(strsplit(unique(InfoTbl$WBID),'_')),NA))
+  RNAiBCsheet = data.frame(WBID = RNAi, rep1 = NA, rep2 = NA, rep3 = NA, rep4 = NA, rep5 = NA, rep6 = NA)
+  for (i in 1:length(RNAi)){
+    for (j in 1:length(InfoTbl$barcode_Seq[which(str_detect(InfoTbl$WBID,RNAi[i]))])){
+      RNAiBCsheet[i,j+1] = InfoTbl$barcode_Seq[which(str_detect(InfoTbl$WBID,RNAi[i]))][j]
+    }
+  }
+  # add other genes to search for dsRNA signals (all other metabolic genes)
+  otherMets = setdiff(allmetGenes$WBName,RNAiBCsheet$WBID)
+  RNAiBCsheet = rbind(RNAiBCsheet, data.frame(WBID = otherMets, rep1 = 'X', rep2 = 'X', rep3 = 'X',
+                                              rep4 = 'X', rep5 = 'X', rep6 = 'X')) 
+  
+  
+  # (2) make bcTable 
+  samples = InfoTbl$sample_name
+  # format the gene names
+  for (i in 1:length(samples)){
+    samples[i] = str_replace(samples[i],'-','_')
+  }
+  # adding prefix'x' to avoid invalid column names in R
+  samples = paste('x.',str_replace(samples,' +','_'),sep = '') 
+  # avoiding '.' in the names that causes bugs in Python 
+  samples_python = str_replace_all(samples,'\\.','_')
+  # skip empty BCs
+  emt = InfoTbl$sample_name == ''
+  bcTable = data.frame(sampleName = samples_python[!emt], bc = InfoTbl$barcode_Seq[!emt])
+  # make sampleSheet 
+  sampleSheet = data.frame(bc = InfoTbl$barcode_Seq[!emt], sampleName = samples[!emt])
+  
+  
+  # save tables
+  write.table(x = RNAiBCsheet,file = paste('./../data/RNAiBCsheets_after_cleaning/RNAiBCsheet_met',plateID,'_lib',libID,'.csv',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  write.table(x = bcTable,file =  paste('./../data/RNAiBCsheets_after_cleaning/bcTable_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ':',row.names = F,col.names = F)
+  write.table(x = sampleSheet,file = paste('./../data/sampleSheets_after_cleaning/sampleSheet_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  
+}  
+```
+
+## Custom WPS application 
+
+For custom, non-RNAi, application of WPS, the RNAi QC is not applicable. So, simply use the following code to derive the sample sheets for downstream analysis.
+
+```{r}
+library(stringr)
+
+# load meta data tables (we use the same input just to showcase)
+InfoTbl_all = read.csv('./../data/metaData/Met7 barcode.csv')
+
+if (!dir.exists('./../data/sampleSheets_nonRNAi')){
+  dir.create('./../data/sampleSheets_nonRNAi')
+}
+
+# loop through each library in met7
+plateID = 7
+for (libID in 1:6){
+  # prepare the files for each library 
+  InfoTbl = InfoTbl_all[,c('barcode_Seq',paste('met',plateID,'.lib',libID,sep = ''))]
+  colnames(InfoTbl) = c('barcode_Seq','sample_name')
+  
+  # format the name a little
+  samples = InfoTbl$sample_name
+  # format the gene names
+  for (i in 1:length(samples)){
+    samples[i] = str_replace(samples[i],'-','_')
+  }
+  # adding prefix'x' to avoid invalid column names in R
+  samples = paste('x.',str_replace(samples,' +','_'),sep = '') 
+  # skip empty BCs
+  emt = InfoTbl$sample_name == ''
+  # make sampleSheet 
+  sampleSheet = data.frame(bc = InfoTbl$barcode_Seq[!emt], sampleName = samples[!emt])
+  
+  
+  # save tables
+   write.table(x = sampleSheet,file = paste('./../data/sampleSheets_nonRNAi/sampleSheet_met',plateID,'_lib',libID,'.txt',sep = ''),quote = F,sep = ',',row.names = F,col.names = F)
+  
+}  
+```
+
+Now, you can proceed to "step2_quality_control" (skip dsRNA analysis). 

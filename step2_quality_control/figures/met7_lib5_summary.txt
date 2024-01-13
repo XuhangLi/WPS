@@ -1,5 +1,5 @@
 these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): gpi-1, adh-5, Y43F4B.5, tre-1, acs-19, alh-12, aagr-2
-these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): F41E6.5, F26D11.1, agl-1
+these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): F41E6.5, agl-1
 depth of these samples is less than 3 mil: x.gpi_1_rep1, x.vector_well2_rep2
 sample    depth
 x.bre_1_rep2    8.817007
@@ -17,7 +17,7 @@ x.F41E6.5_rep2    5.857288
 x.pgph_2_rep2    5.825942
 x.vector_well1_rep1    5.720818
 x.alh_12_rep1    5.680595
-x.F26D11.1_rep2    5.649726
+x.VECTORLIKE_F26D11.1_rep2    5.649726
 x.vector_well2_rep3    5.555269
 x.pfk_1.2_rep3    5.535326
 x.bgal_1_rep2    5.520541
@@ -28,7 +28,7 @@ x.tre_1_rep1    5.262004
 x.R04B5.5_rep1    5.254616
 x.pgph_2_rep1    5.252798
 x.F41E6.5_rep3    5.250518
-x.F26D11.1_rep3    5.138738
+x.VECTORLIKE_F26D11.1_rep3    5.138738
 x.aagr_2_rep1    5.113604
 x.vector_well1_rep3    5.064711
 x.bre_1_rep3    5.045982
@@ -44,7 +44,7 @@ x.acs_19_rep3    4.604293
 x.acs_19_rep1    4.559943
 x.alh_12_rep2    4.501777
 x.agl_1_rep3    4.499641
-x.F26D11.1_rep1    4.434989
+x.VECTORLIKE_F26D11.1_rep1    4.434989
 x.gpi_1_rep2    4.395738
 x.F41E6.5_rep1    4.395399
 x.bgal_1_rep1    4.245909

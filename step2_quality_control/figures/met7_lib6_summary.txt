@@ -1,11 +1,11 @@
-these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): pck-2, div-1, bgal-2, T21C9.6, hxk-2, pgk-1, gpd-3, hxk-3, pfkb-1.1, Y57G11C.3, gob-1
-these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): R151.2, W06E11.1, dhs-21, C26D10.4, aagr-1
+these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): pck-2, div-1, bgal-2, T21C9.6, hxk-2, pgk-1, gpd-3, hxk-3, F53F4.13, pfkb-1.1, Y57G11C.3, D2096.12, gob-1
+these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): W06E11.1
 depth of these samples is less than 3 mil: x.vector_well2_rep2
 sample    depth
 x.T21C9.6_rep2    11.871394
 x.hxk_3_rep2    10.111904
 x.gpd_3_rep2    9.131623
-x.R151.2_rep2    8.63853
+x.VECTORLIKE_R151.2_rep2    8.63853
 x.bgal_2_rep2    7.721864
 x.pck_2_rep2    7.613117
 x.div_1_rep3    7.499996
@@ -13,24 +13,24 @@ x.div_1_rep2    7.329635
 x.vector_well1_rep2    7.228522
 x.Y57G11C.3_rep2    7.052803
 x.W06E11.1_rep3    7.007757
-x.R151.2_rep1    6.667683
+x.VECTORLIKE_R151.2_rep1    6.667683
 x.vector_well1_rep1    6.639512
-x.dhs_21_rep1    6.56054
+x.F53F4.13_rep1    6.56054
 x.hxk_3_rep3    6.339542
-x.C26D10.4_rep2    6.228381
+x.MULTIPLE_chil_19_21_rep2    6.228381
 x.vector_well2_rep3    6.172
 x.T21C9.6_rep1    6.055927
 x.Y57G11C.3_rep3    5.981422
 x.T21C9.6_rep3    5.968246
-x.dhs_21_rep3    5.879319
-x.C26D10.4_rep3    5.635296
+x.F53F4.13_rep3    5.879319
+x.MULTIPLE_chil_19_21_rep3    5.635296
 x.hxk_2_rep3    5.58687
-x.dhs_21_rep2    5.577847
+x.F53F4.13_rep2    5.577847
 x.Y57G11C.3_rep1    5.498423
 x.bgal_2_rep3    5.41951
 x.hxk_3_rep1    5.343968
 x.W06E11.1_rep2    5.286054
-x.aagr_1_rep2    5.225417
+x.D2096.12_rep2    5.225417
 x.vector_well2_rep1    5.142483
 x.pfkb_1.1_rep2    5.095864
 x.gob_1_rep1    5.032512
@@ -41,9 +41,9 @@ x.hxk_2_rep1    4.912383
 x.bgal_2_rep1    4.801286
 x.pgk_1_rep3    4.740013
 x.pck_2_rep3    4.739033
-x.R151.2_rep3    4.644337
+x.VECTORLIKE_R151.2_rep3    4.644337
 x.vector_well1_rep3    4.64007
-x.aagr_1_rep1    4.637742
+x.D2096.12_rep1    4.637742
 x.hxk_2_rep2    4.618031
 x.pfkb_1.1_rep1    4.551867
 x.gpd_3_rep3    4.512381
@@ -51,8 +51,8 @@ x.gob_1_rep3    4.269792
 x.gpd_3_rep1    4.18582
 x.pck_2_rep1    4.104929
 x.pgk_1_rep1    4.053439
-x.aagr_1_rep3    3.876145
-x.C26D10.4_rep1    3.854062
+x.D2096.12_rep3    3.876145
+x.MULTIPLE_chil_19_21_rep1    3.854062
 x.gob_1_rep2    3.718204
 x.div_1_rep1    3.272657
 x.vector_well2_rep2    2.814759

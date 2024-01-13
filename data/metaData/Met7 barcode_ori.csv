@@ -1,5 +1,5 @@
 ﻿barcode_num,barcode_Seq,met7-lib1,met7-lib2,met7-lib3,met7-lib4,met7-lib5,met7-lib6
-1S,AGACTC,D2063.1_rep1,cha-1_rep1,dlat-2_rep1,him-14_rep1,F41E6.5_rep1,pgk-1_rep1
+1S,AGACTC,D2063.1_rep1,unc-17_rep1,dlat-2_rep1,T24C4.5_rep1,F41E6.5_rep1,pgk-1_rep1
 2S,AGCTAG,vector_well1_rep1,ipgm-1_rep1,pck-3_rep1,ger-1_rep1,pgph-2_rep1,pfkb-1.1_rep1
 3S,AGCTCA,klo-2_rep1,ZK1058.3_rep1,ZK632.4_rep1,Y71F9B.9_rep1,tre-1_rep1,hxk-2_rep1
 4S,AGCTTC,mcp-1_rep1,vector_well2_rep1,gsy-1_rep1,men-1_rep1,agl-1_rep1,aagr-1_rep1
@@ -15,7 +15,7 @@
 14S,TCCTAG,gpd-1_rep1,gpd-4_rep1,tpi-1_rep1,alh-1_rep1,acs-19_rep1,W06E11.1_rep1
 15S,TCTGAG,shpk-1_rep1,Y39G8B.1_rep1,gyg-2_rep1,pygl-1_rep1,bgal-1_rep1,bgal-2_rep1
 16S,TCTGCA,pyk-1_rep1,tald-1_rep1,Y47D9A.1_rep1,T04A8.7_rep1,bre-1_rep1,hxk-3_rep1
-17S,TCGAAG,D2063.1_rep2,cha-1_rep2,dlat-2_rep2,him-14_rep2,F41E6.5_rep2,pgk-1_rep2
+17S,TCGAAG,D2063.1_rep2,unc-17_rep2,dlat-2_rep2,T24C4.5_rep2,F41E6.5_rep2,pgk-1_rep2
 18S,TCGACA,vector_well1_rep2,ipgm-1_rep2,pck-3_rep2,ger-1_rep2,pgph-2_rep2,pfkb-1.1_rep2
 19S,TCGATC,klo-2_rep2,ZK1058.3_rep2,ZK632.4_rep2,Y71F9B.9_rep2,tre-1_rep2,hxk-2_rep2
 20S,GTACAG,mcp-1_rep2,vector_well2_rep2,gsy-1_rep2,men-1_rep2,agl-1_rep2,aagr-1_rep2
@@ -31,7 +31,7 @@
 30S,ACTCTG,gpd-1_rep2,gpd-4_rep2,tpi-1_rep2,alh-1_rep2,acs-19_rep2,W06E11.1_rep2
 31S,ACTCGA,shpk-1_rep2,Y39G8B.1_rep2,gyg-2_rep2,pygl-1_rep2,bgal-1_rep2,bgal-2_rep2
 32S,ACGTAC,pyk-1_rep2,tald-1_rep2,Y47D9A.1_rep2,T04A8.7_rep2,bre-1_rep2,hxk-3_rep2
-33S,ACGTTG,D2063.1_rep3,cha-1_rep3,dlat-2_rep3,him-14_rep3,F41E6.5_rep3,pgk-1_rep3
+33S,ACGTTG,D2063.1_rep3,unc-17_rep3,dlat-2_rep3,T24C4.5_rep3,F41E6.5_rep3,pgk-1_rep3
 34S,ACGTGA,vector_well1_rep3,ipgm-1_rep3,pck-3_rep3,ger-1_rep3,pgph-2_rep3,pfkb-1.1_rep3
 35S,CTAGAC,klo-2_rep3,ZK1058.3_rep3,ZK632.4_rep3,Y71F9B.9_rep3,tre-1_rep3,hxk-2_rep3
 36S,CTAGTG,mcp-1_rep3,vector_well2_rep3,gsy-1_rep3,men-1_rep3,agl-1_rep3,aagr-1_rep3

@@ -1,12 +1,5 @@
 RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
-  library(stringr)
-  library(ggplot2)
-  library(ggrepel)
-  library(gridExtra)
-  library(stringr)
-  library(dplyr)
-  library(pheatmap)
-  library(RColorBrewer)
+  cat('Executing QC pipeline for ',expID, '-',libID,'...\n',sep = '')
   
   # load annotation tables 
   WBID = read.table('./../data/metaData/WBIDtbl.txt',header = T,sep = '\t')
@@ -16,7 +9,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   # ribosomal genes 
   riboGenes = read.table('./../data/metaData/ribosomalGenes.txt',header = T,sep = '\t')
   # sample sheet
-  sampleSheet = read.csv(paste('./../data/sampleSheets/sampleSheet_',expID,'_',libID,'.txt',sep = ''),header = F)
+  sampleSheet = read.csv(paste('./../data/sampleSheets_',status,'/sampleSheet_',expID,'_',libID,'.txt',sep = ''),header = F)
   
   if (!dir.exists('figures')){
     dir.create('figures')
@@ -35,7 +28,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   readsCount = read.table(paste("./../step1_process_raw_data/output/readsCounts/",expID,'-',libID,'_reads_count.txt',sep = ''),header = T,row.names = 1,sep = '\t')
   colnames(readsCount) = sampleSheet$V2[match(colnames(readsCount), sampleSheet$V1)]
   if (sum(is.na(colnames(readsCount))) >0){ # remove empty barcodes 
-    cat('empty barcodes contain ',sum(readsCount[,is.na(colnames(readsCount))])/1e6,' mil reads! High number (e.g., > 1 mil) indicates a wrong/swapped barcode!',sep = '')
+    cat('empty barcodes contain ',sum(readsCount[,is.na(colnames(readsCount))])/1e6,' mil reads! High number (e.g., > 1 mil) indicates a wrong/swapped barcode!\n',sep = '')
     readsCount = readsCount[,-which(is.na(colnames(readsCount)))]
   }
   
@@ -46,7 +39,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   depth = colSums(readsCount)
   depth2  <- depth[order(depth,decreasing=TRUE)]
   depth2 = depth2 / 1000000
-  cat(as.character(sum(depth2 < 1)),' samples are low-depth (< 1 mil)',sep = '')
+  cat(as.character(sum(depth2 < 1)),' samples are low-depth (< 1 mil)\n',sep = '')
   lowSamples = names(depth2[depth2 < 3])
   
   hist(depth2,
@@ -79,7 +72,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
       }
     }
   } 
-  cat('\033[31mWarining: The read counts of ',as.character(round(100*length(notCorrectedRNAi)/nrow(ToCorrect_met1_lib))),'% RNAi targeted genes cannot be corrected because of loss of power!\n',sep = '')
+  cat('\033[31mWarining: The read counts of ',as.character(round(100*length(notCorrectedRNAi)/nrow(ToCorrect_met1_lib))),'% RNAi targeted genes cannot be corrected because of loss of power!\033[39m\n',sep = '')
   
   data = readsCount
   # normalize to TPM
@@ -152,7 +145,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
       RNAitbl$ctr_readsCount[i] = median(as.matrix(readsCount[target, colnames(readsCount) %in% vectorSamples]))
     }else{
       RNAitbl$ctr_readsCount[i] = 0
-      cat('Notice: in ',expID,'-',libID,', RNAi targeted gene ', target,' is not detected!',sep = '')
+      cat('Notice: in ',expID,'-',libID,', RNAi targeted gene ', target,' is not detected!\n',sep = '')
     }
     
     # calculate FC within each replicate (these codes are stupid..)
@@ -334,7 +327,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   pass1 = pass1[!is.na(pass1)] 
   # otherwise we require at least 10-fold enrichment of the dsRNA signals
   pass2 = rownames(dsRNA)[dsRNA$FC > log2(10)]
-  cat('INFO: these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): ',paste(intersect(pass1,pass2),collapse = ', '),sep = '')
+  cat('INFO: these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): ',paste(intersect(pass1,pass2),collapse = ', '),'\n',sep = '')
   # RNAi failed
   cat('\033[31mWARNING: these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): ',paste(setdiff(sampleNames,union(pass1,pass2)),collapse = ', '),'\033[39m\n',sep = '')
   cat('\033[31mPlease check their QC figures carefully! \033[39m\n')
@@ -408,14 +401,15 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
            main = 'Log2(dsRNA_CPM_RNAi + 1) - log2(dsRNA_CPM_emptyLib + 1)')
   while (!is.null(dev.list())) {dev.off()}
 }
-nonRNAi_QC <- function(expID, libID){
+nonRNAi_QC <- function(expID, libID, status){
+  cat('Formating data for ',expID, '-',libID,'...\n',sep = '')
   
   # process the count data 
   
   # ribosomal genes 
   riboGenes = read.table('./../data/metaData/ribosomalGenes.txt',header = T,sep = '\t')
   # sample sheet
-  sampleSheet = read.csv(paste('./../data/sampleSheets/sampleSheet_',expID,'_',libID,'.txt',sep = ''),header = F)
+  sampleSheet = read.csv(paste('./../data/sampleSheets_',status,'/sampleSheet_',expID,'_',libID,'.txt',sep = ''),header = F)
   
   if (!dir.exists('figures')){
     dir.create('figures')
@@ -428,13 +422,13 @@ nonRNAi_QC <- function(expID, libID){
   graphics.off()
   
   # open a pdf for main QC output figures 
-  pdf(paste("figures/",expID,'_',libID,'_QC_report.pdf',sep = '')) 
+  pdf(paste("figures/NON_RNAi_",expID,'_',libID,'_QC_report.pdf',sep = '')) 
   
   # load read counts
   readsCount = read.table(paste("./../step1_process_raw_data/output/readsCounts/",expID,'-',libID,'_reads_count.txt',sep = ''),header = T,row.names = 1,sep = '\t')
   colnames(readsCount) = sampleSheet$V2[match(colnames(readsCount), sampleSheet$V1)]
   if (sum(is.na(colnames(readsCount))) >0){ # remove empty barcodes 
-    cat('empty barcodes contain ',sum(readsCount[,is.na(colnames(readsCount))])/1e6,' mil reads! High number (e.g., > 1 mil) indicates a wrong/swapped barcode!',sep = '')
+    cat('empty barcodes contain ',sum(readsCount[,is.na(colnames(readsCount))])/1e6,' mil reads! High number (e.g., > 1 mil) indicates a wrong/swapped barcode!\n',sep = '')
     readsCount = readsCount[,-which(is.na(colnames(readsCount)))]
   }
   
@@ -445,7 +439,7 @@ nonRNAi_QC <- function(expID, libID){
   depth = colSums(readsCount)
   depth2  <- depth[order(depth,decreasing=TRUE)]
   depth2 = depth2 / 1000000
-  cat(as.character(sum(depth2 < 1)),' samples are low-depth (< 1 mil)',sep = '')
+  cat(as.character(sum(depth2 < 1)),' samples are low-depth (< 1 mil)\n',sep = '')
   lowSamples = names(depth2[depth2 < 3])
   
   hist(depth2,
@@ -459,6 +453,142 @@ nonRNAi_QC <- function(expID, libID){
   # normalize to TPM
   TPM = sweep(data, 2, colSums(data), FUN="/") * 1e6
   # save the processed count data 
-  save(TPM,readsCount, file=paste("./outputs/processed_read_count_",expID,'_',libID,".RData",sep = ''))
+  save(TPM,readsCount, file=paste("./outputs/NON_RNAi_processed_read_count_",expID,'_',libID,".RData",sep = ''))
   
 }
+EDA_plots <- function(expID, libID, controlID){
+  
+  ## load and merge all data
+  load(paste("./outputs/processed_read_count_",expID,'_',libID,".RData",sep = ''))
+  
+  # remove the low depth in order not to bias normalization
+  readsCount = readsCount[, !str_detect(colnames(readsCount),'^x.LOWDEPTH_')]
+  
+  # construct a dds object and use DEseq2 package for EDA
+  input <- readsCount
+  coldata =  data.frame(sampleName = as.factor(colnames(readsCount)))
+  rownames(coldata) = colnames(input)
+  coldata$RNAi = str_replace(coldata$sampleName,'_rep.$','')
+  coldata$RNAi = as.factor(str_replace(coldata$RNAi,'_well.$',''))
+  coldata$rep = as.factor(str_extract(coldata$sampleName,'_rep.$'))
+  
+  dds <- DESeqDataSetFromMatrix(countData = input,
+                                colData = coldata,
+                                design= ~ rep + RNAi)
+  
+  # filtering 
+  keep <- rowSums(counts(dds)>=10) >= 1
+  dds <- dds[keep,]
+  
+  # variance stabilization transformation 
+  vsd <- vst(dds, blind=FALSE)
+  mat <- assay(vsd)
+  # remove any potential batch effect associated with replicates 
+  mat <- limma::removeBatchEffect(mat, batch = vsd$rep, design= model.matrix(~ vsd$RNAi))
+  
+  if (controlID %in% unique(as.character(vsd$RNAi))){
+    allRNAi = c(controlID,setdiff(unique(as.character(vsd$RNAi)),controlID))
+  }else{
+    allRNAi = unique(as.character(vsd$RNAi))
+  }
+  
+  dataMat = as.data.frame(mat)
+  pdf(paste("figures/",expID,'_',libID,'_initial_EDA.pdf',sep = '')) 
+  par(mar = c(0, 0, 0, 0))
+  for (i in 1:length(allRNAi)){
+    if (controlID %in% allRNAi){
+      mat_sub = mat[,dds$RNAi %in% c(controlID, allRNAi[i])]
+    }else{
+      mat_sub = mat[,dds$RNAi %in% c(allRNAi[i])]
+    }
+    pca <- prcomp(t(mat_sub))
+    percentVar <- pca$sdev^2 / sum( pca$sdev^2 )
+    percentVar <- round(100 * percentVar)
+    pcaData = data.frame(PC1=pca$x[,1], PC2=pca$x[,2], name=colnames(mat_sub))
+    if (controlID %in% allRNAi){
+      pcaData$RNAi = dds$RNAi[dds$RNAi %in% c(controlID,allRNAi[i])]
+      pcaData$batch = dds$batchLabel[dds$RNAi %in% c(controlID,allRNAi[i])]
+    }else{
+      pcaData$RNAi = dds$RNAi[dds$RNAi %in% c(allRNAi[i])]
+      pcaData$batch = dds$batchLabel[dds$RNAi %in% c(allRNAi[i])]
+    }
+    pcaData$RNAi = factor(as.character(pcaData$RNAi), levels = unique(c(allRNAi[i],controlID)))
+    p1 = ggplot(pcaData, aes(PC1, PC2,label = name)) + #  or time
+      geom_point(aes(color = RNAi,), size = 3) +
+      xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+      ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+      scale_color_manual(values=c("red","grey")) +
+      geom_text_repel()+
+      ggtitle(paste(paste(expID,libID,i,allRNAi[i],sep = '-'),'\n',
+                    paste(names(colSums(counts(dds)[,dds$RNAi %in% allRNAi[i]])),collapse = ' '),'\n',
+                    paste(as.character(colSums(counts(dds)[,dds$RNAi %in% allRNAi[i]]) /1e6),collapse = ' '),sep = '')
+      )
+    print(p1)
+
+    sampleDists <- dist(t(mat_sub))
+    sampleDistMatrix <- as.matrix(sampleDists)
+    library("RColorBrewer")
+    colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+    pheatmap(sampleDistMatrix,
+             clustering_distance_rows=sampleDists,
+             clustering_distance_cols=sampleDists,col=colors)
+    
+    mat_sub = as.data.frame(mat[,dds$RNAi %in% allRNAi[i]])
+    vectorsamples = colnames(mat_sub)
+    p2 = ggpairs(mat_sub,
+                lower = list(continuous = wrap("points", alpha = 0.5,    size=0.1))) 
+    # rasterize image to reduce file size 
+    width_in_inches <- 7
+    height_in_inches <- 7
+    dpi <- 300
+    png(filename = "temp_plot.png", width = width_in_inches * dpi, height = height_in_inches * dpi, res = dpi)
+    print(p2)
+    dev.off()
+    plot_raster <- png::readPNG("temp_plot.png")
+    plot.new()
+    rasterImage(plot_raster, 0, 0, 1, 1)
+    unlink("temp_plot.png")
+    
+  }
+  while (!is.null(dev.list())) {dev.off()}
+}
+
+
+
+qLevels <- function(expID, libID, badSet){
+  load(paste("./outputs/processed_read_count_",expID,'_',libID,".RData",sep = ''))
+  
+  # remove the low depth in order not to bias normalization
+  readsCount = readsCount[, !str_detect(colnames(readsCount),'^x.LOWDEPTH_')]
+  
+  # create a dds object for easy operation
+  input <- readsCount
+  coldata =  data.frame(sampleName = as.factor(colnames(readsCount)))
+  rownames(coldata) = colnames(input)
+  coldata$RNAi = str_replace(coldata$sampleName,'_rep.$','')
+  coldata$RNAi = as.factor(str_replace(coldata$RNAi,'_well.$',''))
+  coldata$rep = as.factor(str_extract(coldata$sampleName,'_rep.$'))
+  
+  invisible(suppressMessages(dds <- DESeqDataSetFromMatrix(countData = input,
+                                colData = coldata,
+                                design= ~ rep + RNAi)))
+  
+  # filtering 
+  keep <- rowSums(counts(dds)>=10) >= 1
+  dds <- dds[keep,]
+  
+  # ignore the number conversions - just for historical reason - it is basically bad and good 
+  dds$Qlevel = 1
+  dds$Qlevel[colnames(dds) %in% badSet] = 4
+  if (!all(badSet %in% colnames(dds))){
+    stop('The input sample ID cannot be matched to data. Check for typos!')
+  }
+ 
+  # save the quality levels
+  qLevels =  data.frame(sampleName = colnames(dds), QL = dds$Qlevel)
+  rownames(qLevels) = qLevels$sampleName
+  qLevels$QL[qLevels$QL == 1] = 'good'
+  qLevels$QL[qLevels$QL == 4] = 'bad'
+  write.csv(qLevels,paste('outputs/qualityLevels_',expID,'_', libID,'.csv',sep = ''))
+}
+

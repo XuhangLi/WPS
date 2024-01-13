@@ -1,5 +1,5 @@
 these RNAi conditions show high-confidence in RNAi QC (2-FC KD AND 10-FC detection of dsRNA): hxk-1, icl-1, alh-1, T04A8.7, ger-1, R05F9.6, men-1
-these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): pfk-1.1, pygl-1, Y71F9B.9, him-14
+these RNAi conditions FAILED to pass RNAi QC (lack of 2-FC KD or 10-FC detection of dsRNA): Y71F9B.9, him-14
 depth of these samples is less than 3 mil: x.vector_well2_rep2
 sample    depth
 x.him_14_rep2    16.097487
@@ -13,12 +13,12 @@ x.sodh_1_rep3    6.833363
 x.R05F9.6_rep3    6.782023
 x.ger_1_rep3    6.528764
 x.vector_well1_rep1    6.38168
-x.pfk_1.1_rep2    6.289881
+x.MULTIPLE_col_166_167_168_169_170_rep2    6.289881
 x.men_1_rep2    6.097564
 x.T04A8.7_rep3    6.053217
 x.T04A8.7_rep1    5.983252
 x.alh_5_rep3    5.839457
-x.pygl_1_rep2    5.832423
+x.T22F3.2_rep2    5.832423
 x.vector_well2_rep3    5.700552
 x.Y71F9B.9_rep3    5.386466
 x.gana_1_rep2    5.367012
@@ -37,8 +37,8 @@ x.Y71F9B.9_rep2    4.768636
 x.icl_1_rep1    4.768084
 x.R05F9.6_rep1    4.758451
 x.men_1_rep3    4.637351
-x.pfk_1.1_rep1    4.577556
-x.pygl_1_rep1    4.563642
+x.MULTIPLE_col_166_167_168_169_170_rep1    4.577556
+x.T22F3.2_rep1    4.563642
 x.tps_2_rep1    4.553374
 x.alh_1_rep1    4.432434
 x.men_1_rep1    4.272572
@@ -50,9 +50,9 @@ x.sodh_1_rep1    4.091018
 x.ger_1_rep1    3.956594
 x.tps_2_rep3    3.939056
 x.gana_1_rep1    3.906528
-x.pfk_1.1_rep3    3.592277
+x.MULTIPLE_col_166_167_168_169_170_rep3    3.592277
 x.tps_2_rep2    3.577167
 x.alh_5_rep2    3.574035
 x.hxk_1_rep1    3.565795
-x.pygl_1_rep3    3.474025
+x.T22F3.2_rep3    3.474025
 x.vector_well2_rep2    2.703615
