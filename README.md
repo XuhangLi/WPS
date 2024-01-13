@@ -29,8 +29,8 @@ WPS data processing involves multiple tools and considerable computational power
 
 * Via Foundry: the raw data processing uses a pre-built dolphinNext pipeline for the ease of use and for easy management of large-scale data. Please register at [Via Foundry](https://viafoundry.umassmed.edu) before you start. 
 If you intend to process the raw data (e.g., aligning the reads to genome) manually, please see [1_process_the_raw_data](step1_process_raw_data/) for more information (but you may need to install some dependencies that are not included in this list). We strongly recommend using the dolphinNext pipeline for the sake of reproducibility and robustness.
-* Python (what version?)
-* R (what verison?)
+* Python 2.7
+* R > 3.5
 
 ## Walkthrough<a name="walkthrough"></a>
 
