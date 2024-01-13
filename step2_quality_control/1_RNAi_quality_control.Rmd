@@ -1,0 +1,159 @@
+---
+title: "WPS RNAi quality control"
+output: html_document
+date: "2024-01-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## WPS data RNAi Quality Control (QC)
+
+In this tutorial, we introduce the first and most important QC step for standard WPS application, the QC of RNAi identity and efficiency. For WPS applications that do not use RNAi (e.g., on chemical exposures), please skip the RNAi QC and only run a data filtering following the last section of this tutorial.
+
+## Standard WPS application
+
+### Required packages
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+# install if not in your environment
+library(stringr)
+library(ggplot2)
+library(ggrepel)
+library(gridExtra)
+library(stringr)
+library(dplyr)
+library(pheatmap)
+library(RColorBrewer)
+```
+
+### Running QC
+
+For standard WPS application, the treatment is to knock down *C. elegans* genes following our protocol. Each RNAi plate contains \~96 RNAi conditions and these RNAi conditions are experimented in triplicates, yielding \~300 samples. These samples are pooled into 6 sequencing libraries, with each containing \~16 RNAi conditions in triplicate and 6 vector controls.
+
+After generating the metadata tables and read count tables (see /step1_process_raw_data/), run the following codes to produce the QC figures for manual inspection.
+
+```{r}
+source('RNAi_QC_functions.R')
+
+# we use met7 as an example
+exps = c('met7')
+libs = c('lib1','lib2','lib3','lib4','lib5','lib6')
+# include the sample names for the six vector controls
+vectorSamples = c('x.vector_well1_rep1','x.vector_well1_rep2','x.vector_well1_rep3',
+                    'x.vector_well2_rep1','x.vector_well2_rep2','x.vector_well2_rep3')
+# set the total depth of the control bam file 
+ctr_bam_depth = 318270479 
+# as we used the developmental stage library as control, the control library total depth is a constant as provided. If you choose to use your own control bam for dsRNA analysis, please change the number to the depth (total read count) of the bam file you provided. 
+
+
+# loop through each plate and then each library 
+for (expID in exps){
+  for (libID in libs){
+    RNAi_QC(expID,libID, vectorSamples, 'before_cleaning', ctr_bam_depth)
+  }
+}
+```
+
+### Inspecting QC results
+
+The QC pipeline generates a series of QC plots/tables for an investigator to identify potential problems in the library. These QC plots and tables were saved in /figures/ and /output/ folder.
+
+Let's use a single library (met7_lib2) as an example:
+
+Main QC figures are in a single output pdf: [met7_lib2_QC_report.pdf](figures/met7_lib2_QC_report.pdf)
+
+<iframe src="figures/met7_lib2_QC_report.pdf" style="width:800px; height:500px;" frameborder="0">
+
+</iframe>
+
+**Figures include:**
+
+-   **library depth distribution**: histogram showing the depth (total read counts) for each individual sample. You should expect a symmetric distribution around your target depth (here is \~5 mil).
+
+-   **RNAi efficiency**: bar plots showing the Fold-Change (FC) decrease of the targeted gene expression, quantified based on TPM. Genes whose median expression in control samples are less than 10 read counts are skipped (empty bar). Red pound key indicates the corresponding condition is not corrected for dsRNA contamination (thus the quantification of targeted gene expression may not be accurate) because it compromises the power \>50%.
+
+-   **dsRNA detection**: bar plots showing the FC enrichment of dsRNA signals in the targeted condition vs. a no-RNAi background (the control bam file). By default, we used our development stage library as the control bam. You should expect at least 2-FC enrichment (red dashed line) and usually \> 10-FC.
+
+-   **dsRNA heatmap**: Heatmap showing the dsRNA signal quantification measured with logFC of CPM+1. Rows are genes and columns are samples. This figure is useful to identify possible cross-contamination or sample swapping. You should expect signals along the diagonal (dsRNA signals only appear in the corresponding condition). When a condition is off the diagonal, or multiple signals for the same sample, it indicates a bad RNAi clone and should be followed up with Sanger sequencing confirmation.
+
+A text summary can be accessed in [met7_lib2_summary.txt](figures/met7_lib2_summary.txt)
+
+```{r}
+lines <- readLines("figures/met7_lib2_summary.txt")
+cat(lines, sep="\n")
+```
+
+Lastly, the RNAi efficiency raw data can be accessed in [RNAi_efficiency_met7_lib2.csv](outputs/RNAi_efficiency_met7_lib2.csv)
+
+```{r}
+effi = read.csv("outputs/RNAi_efficiency_met7_lib2.csv")
+head(effi)
+```
+
+For QC of large-scale data (multiple plates), we recommend inspecting the PDF report files in your file browsers and pay attention to the fail-QC conditions indicated in the text summary files. When a condition lacks dsRNA detection (i.e., FC enrichment \< 10-fold) and targeted gene is not substantially knocked down (FC \< 2), we recommend doing Sanger sequencing of the original RNAi clone to confirm it carrier the correct RNAi plasmid. Based on our experience with \> 1000 RNAi conditions, this QC criteria is quite accurate (\>90% sequenced clone turned out to be a confirmed bad clone).
+
+Additionally, our dsRNA heatmap shows the potential targeted gene for bad clones. Based on our experience, if a bad clone actually targets another gene, the dsRNA heatmap usually is able to identify it. If there is no signals in dsRNA heatmap and the clone fails RNAi-QC, most likely this clone is a non-targeting perturbation.
+
+Although one could opt to use the RNAi QC result to correct spurious RNAi conditions without further experimental confirmation, for the best research rigor, we recommend always following up fail-QC clones with Sanger sequencing to confirm the RNAi identity.
+
+### Repeat QC with updated RNAi identity
+
+After confirming potential bad clones, update the input metadata table (see [Met7 barcode.csv](./../data/metaData/Met7%20barcode.csv) for updated table of met7 plate) and rerun the previous pipeline to produce the final QC results with correct RNAi identity.
+
+When updating the sample information for bad clones, please follow these nomenclature guidelines:
+
+-   swapped RNAi clones should be directly labeled with the actual targeted gene name
+
+-   low-depth samples should be labeled with prefix "LOWDEPTH\_", e.g., "LOWDEPTH_acdh-1_rep1".
+
+-   short-insert samples should be labeled with prefix "SHORT\_".
+
+-   vector-like samples with "VECTORLIKE\_".
+
+-   recombined vectors with "RCBVECTOR\_"
+
+-   multiple-targets with "MULTIPLE\_"
+
+-   no-signal samples in Sanger sequencing with "NOSIGNAL\_"
+
+We do not recommend using other prefixes to label bad clones, as they will not be recognized by the QC pipeline. If some bad clones turned out to be other than the above categories, one could use "VECTORLIKE\_" as a workaround to get the program running. These prefixes are only used to recognize the labeled bad clones and skip them in the QC. They will NOT be used to filter any data.
+
+Once metadata annotation is updated, repeat the process as follows:
+
+-   Rerun "step1_process_raw_data/1_prepareTbls" with new metadata table input ([Met7 barcode.csv](./../data/metaData/Met7%20barcode.csv))
+
+-   Rerun "step1_process_raw_data/2_dsRNA_analysis" with the updated input tables. Save the results in a new folder named "RNAiAnalysis_after_cleaning" (see [RNAiAnalysis_after_cleaning](./../step1_process_raw_data/RNAiAnalysis_after_cleaning))
+
+-   Rerun "step2_quality_control/1_quality_control" using the following codes. Note that argument 'before_cleaning' should be changed to 'after_cleaning' to instruct the program to analyze dsRNA quantification in the *RNAiAnalysis_after_cleaning* folder.
+
+```{r}
+# repeat using the updated RNAi QC output files
+for (expID in exps){
+  for (libID in libs){
+    RNAi_QC(expID,libID, vectorSamples, 'after_cleaning', ctr_bam_depth)
+  }
+}
+```
+
+Now, these QC figures are final. The vast majority of conditions should pass QC up till here. There might be a few remaining conditions not passing QC (as reported in the text output) but we keep them in the dataset if the RNAi clone has been confirmed with Sanger sequencing. Cautions may be paid to these conditions during data interpretation.
+
+### Custom WPS application
+
+RNAi identity QC is not applicable for custom WPS applications that are not based on RNAi. We offer a wrapper function to simply produce the formated data with basic filters (such as removing ribosomal RNA) for downstream use.
+
+```{r}
+source('RNAi_QC_functions.R')
+
+# we use met7 as an example
+exps = c('met7')
+libs = c('lib1','lib2','lib3','lib4','lib5','lib6')
+
+# loop through each plate and then each library 
+for (expID in exps){
+  for (libID in libs){
+    nonRNAi_QC(expID,libID, 'nonRNAi')
+  }
+}
+```

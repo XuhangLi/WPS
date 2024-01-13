@@ -494,7 +494,7 @@ EDA_plots <- function(expID, libID, controlID){
   
   dataMat = as.data.frame(mat)
   pdf(paste("figures/",expID,'_',libID,'_initial_EDA.pdf',sep = '')) 
-  par(mar = c(0, 0, 0, 0))
+  #par(mar = c(0, 0, 0, 0))
   for (i in 1:length(allRNAi)){
     if (controlID %in% allRNAi){
       mat_sub = mat[,dds$RNAi %in% c(controlID, allRNAi[i])]
@@ -527,28 +527,21 @@ EDA_plots <- function(expID, libID, controlID){
 
     sampleDists <- dist(t(mat_sub))
     sampleDistMatrix <- as.matrix(sampleDists)
-    library("RColorBrewer")
     colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
     pheatmap(sampleDistMatrix,
              clustering_distance_rows=sampleDists,
              clustering_distance_cols=sampleDists,col=colors)
-    
+
     mat_sub = as.data.frame(mat[,dds$RNAi %in% allRNAi[i]])
     vectorsamples = colnames(mat_sub)
-    p2 = ggpairs(mat_sub,
+    p3 = ggpairs(mat_sub,
                 lower = list(continuous = wrap("points", alpha = 0.5,    size=0.1))) 
     # rasterize image to reduce file size 
-    width_in_inches <- 7
-    height_in_inches <- 7
-    dpi <- 300
-    png(filename = "temp_plot.png", width = width_in_inches * dpi, height = height_in_inches * dpi, res = dpi)
-    print(p2)
-    dev.off()
-    plot_raster <- png::readPNG("temp_plot.png")
-    plot.new()
-    rasterImage(plot_raster, 0, 0, 1, 1)
-    unlink("temp_plot.png")
-    
+    ggsave("temp.png", p3, dpi = 300)
+    bitmap <- png::readPNG("temp.png")
+    grid.newpage()
+    grid.raster(bitmap)
+    unlink("temp.png")
   }
   while (!is.null(dev.list())) {dev.off()}
 }
