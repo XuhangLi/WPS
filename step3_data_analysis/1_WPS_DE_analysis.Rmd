@@ -9,43 +9,49 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## WPS data sample Quality Control (QC)
+## WPS DE analysis
 
-Following the RNAi identity QC, we should already corrected all wrong clones and ready to move to the second QC step, sample qualities. Sample quality QC identifies bad samples that behave unexpected using Exploratory Data Analysis (EDA). For instance, a sample that decorrelates with the other two biological replicates for the same RNAi condition. This EDA based QC is a standard step of RNA-seq analysis and we follow the most common way - using PCA, correlation and distances. This walkthrough provides a convenient template to generate these QC plots for identifying bad samples.
+Although users can choose their favorite Differentially Expression (DE) analysis tool, we recommend using our WPS DE package if ~100 or more conditions are collected (i.e., at least one bacterial plate). When number of conditions is low, please go with regular DE method such as DESeq2 or edgeR. 
 
-Both standard and custom application of WPS should go through this sample quality check, and remove all bad samples before proceeding to the biological interpretation phase (such as a DE analysis).
+This tutorial gives a template to quickly setup a WPS DE analysis with the cleaned dataset processed following our pipeline. 
 
 ### Required packages
 
 ```{r, results = 'hide', message = FALSE, warning = FALSE}
-# install if not in your environment
+
+# install WPS DE if not in your environment
+# if (!require("devtools", quietly = TRUE)){
+#   install.packages("devtools")
+# }
+# devtools::install_github("XuhangLi/wpsDE")
+
+# load package
+library(wpsDE)
 library(stringr)
-library(ggplot2)
-library("GGally") 
-library(DESeq2)
-library(ggrepel)
-library(pheatmap)
-library(grid)
-library("RColorBrewer")
-library(png)
 ```
 
-### Running QC
+### Running WPS DE
 
-The following code uses a wrapper function to generate EDA plots for each condition. Please note that we offer this function just for the convenience to seamlessly analyze WPS data. Please feel free to perform the EDA/sample quality check in your own way!
+WPS DE package is highly integrated with processing WPS dataset. So, running it is straightforward. Let's use met7 data as an example. For running WPS DE, please merge all the data you have if you collect more than one RNAi plate!
 
 ```{r fig.show='hide', message=FALSE, results='hide'}
-source('RNAi_QC_functions.R')
+# load data
+load('./../step2_quality_control/outputs/cleaned_merged_raw_data_met7.Rdata')
 
-# we use met7 as an example
-exps = c('met7')
-libs = c('lib1','lib2','lib3','lib4','lib5','lib6')
-# specify the ID (name in the treatment covariate) for control samples
-controlID = 'x.vector' # in WPS, we conveniently call them 'vector'. If you use another name such as "control", change it to the actual name. 
-# loop through each plate and then each library 
-for (expID in exps){
-  for (libID in libs){
-    EDA_plots(expID,libID, controlID)
-  }
-}
+# prepare metadata table
+rep_batch = colnames(input)
+rep_batch = str_extract(rep_batch,'rep._met[0-9]+_')
+rep_batch = str_replace(rep_batch,'_met._$','')
+rep_batch = as.factor(rep_batch)
+      
+metaDataTable = data.frame(sampleID = colnames(input),
+                           covTreatment = RNAi,
+                           covBatch = rep_batch, # WPS DE starts with per-library DE, so the actual                                                     bacth covariates are replicate batches!
+                           libID = batchLabel
+                           )
+
+res = WPS_DE(input, metaDataTable)
+
 ```
+Because of the large scale of the dataset, DE analysis can take a few hours. We will release a parallelization function soon to increase the speed.
+
