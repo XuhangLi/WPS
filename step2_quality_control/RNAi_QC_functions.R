@@ -545,9 +545,6 @@ EDA_plots <- function(expID, libID, controlID){
   }
   while (!is.null(dev.list())) {dev.off()}
 }
-
-
-
 qLevels <- function(expID, libID, badSet){
   load(paste("./outputs/processed_read_count_",expID,'_',libID,".RData",sep = ''))
   
@@ -584,4 +581,92 @@ qLevels <- function(expID, libID, badSet){
   qLevels$QL[qLevels$QL == 4] = 'bad'
   write.csv(qLevels,paste('outputs/qualityLevels_',expID,'_', libID,'.csv',sep = ''))
 }
+cleanAndSave <- function(plateID, libs, controlID){
+  
+  # load first library and format metadata
+  load(paste("./outputs/processed_read_count_",plateID,"_",libs[1],".RData",sep = ''))
+  batchLabel = rep(paste(plateID,'_',libs[1],sep = ''),ncol(readsCount))
+  input = readsCount
+  RNAi = colnames(input)
+  RNAi = str_replace(RNAi,'_rep.$','')
+  RNAi = str_replace(RNAi,'_well.$','')
+  colnames(input) = paste(colnames(input),'_',plateID,'_',libs[1],sep = '')
+  # assign the sample label order to put controls at beginning in each batch
+  ctrInd = which(str_detect(RNAi,controlID))
+  input = input[,c(ctrInd,setdiff(1:ncol(input),ctrInd))]
+  batchLabel = batchLabel[c(ctrInd,setdiff(1:ncol(input),ctrInd))]
+  RNAi = RNAi[c(ctrInd,setdiff(1:ncol(input),ctrInd))]
+  
+  # bad samples
+  bad_list_certain = c()
+  for(libID in libs){
+    badsamples = read.csv(paste('outputs/qualityLevels_',plateID,'_',libID,'.csv',sep = ''),row.names = 1)
+    badsamples = badsamples$sampleName[badsamples$QL == 'bad']
+    if(length(badsamples)>0){
+      bad_list_certain = c(bad_list_certain,
+                           paste(badsamples,plateID,libID,sep = '_'))
+    }
+  }
+  
+  # loop through other libraries to load data
+  allBatches = paste(plateID,setdiff(libs,libs[1]),sep = '_');
+  for (i in 1:length(allBatches)){
+    load(paste("./outputs/processed_read_count_",allBatches[i],".RData",sep = ''))
+    RNAi0 = str_replace(colnames(readsCount),'_rep.$','')
+    RNAi0 = str_replace(RNAi0,'_well.$','')
+    # assign the sample label order to put controls at beginning in each batch
+    ctrInd = which(str_detect(RNAi0,controlID))
+    readsCount = readsCount[,c(ctrInd,setdiff(1:ncol(readsCount),ctrInd))]
+    RNAi0 = RNAi0[c(ctrInd,setdiff(1:ncol(readsCount),ctrInd))]
+    RNAi = c(RNAi, RNAi0)
+    # format names and combine data
+    colnames(readsCount) = paste(colnames(readsCount),'_',allBatches[i],sep = '')
+    input <- input %>% rownames_to_column('gene') %>%
+      full_join(readsCount %>% rownames_to_column('gene'), by = 'gene')
+    rownames(input) = input$gene
+    input = input[,-1]
+    input[is.na(input)] = 0
+    batchLabel = c(batchLabel, rep(allBatches[i],ncol(readsCount)))
+  }
+  
+  # show some numbers
+  N_total = ncol(input)
+  N_bad = length(bad_list_certain)
+  N_low = sum(str_detect(colnames(input),'^x.LOWDEPTH_'))
+  N_SHORT = sum(str_detect(colnames(input),'^x.SHORT_'))
+  N_VECTORLIKE = sum(str_detect(colnames(input),'^x.VECTORLIKE_'))
+  N_RCBVECTOR = sum(str_detect(colnames(input),'^x.RCBVECTOR_'))
+  N_MULTIPLE = sum(str_detect(colnames(input),'^x.MULTIPLE_'))
+  N_NOSIGNAL = sum(str_detect(colnames(input),'^x.NOSIGNAL_'))
+  cat('INFO: total sample: ',N_total,'\n',sep = '')
+  cat('INFO: total bad sample: ',N_bad,'\n',sep = '')
+  cat('INFO: total low depth sample: ',N_low,'\n',sep = '')
+  cat('INFO: total SHORT RNAi sample: ',N_SHORT,sep = '')
+  cat('INFO: total VECTORLIKE RNAi sample: ',N_VECTORLIKE,'\n',sep = '')
+  cat('INFO: total RCBVECTOR RNAi sample: ',N_RCBVECTOR,'\n',sep = '')
+  cat('INFO: total MULTIPLE RNAi sample: ',N_MULTIPLE,'\n',sep = '')
+  cat('INFO: total NOSIGNAL RNAi sample: ',N_NOSIGNAL,'\n',sep = '')
+  cat('INFO: sample quality pass rate: ',(N_total - N_bad - N_low)/N_total,'\n',sep = '')
+  cat('INFO: quality+RNAi pass rate: ',(N_total - N_bad - N_low - N_SHORT - N_VECTORLIKE - N_RCBVECTOR - N_MULTIPLE - N_NOSIGNAL)/N_total,'\n',sep = '')
+  # remove all the bad samples and low depth samples
+  bad_list_certain = c(bad_list_certain,colnames(input)[str_detect(colnames(input),'^x.LOWDEPTH_')])
+  keep = !is.element(colnames(input),bad_list_certain)
+  input = input[,keep]
+  RNAi = RNAi[keep]
+  batchLabel = batchLabel[keep]
+  
+  if (ncol(input) != (N_total - N_bad - N_low)){
+    stop('Error occurred! Numbers do not match')
+  }
+  
+  # show replication number
+  cat('Number of replicates in each condition:\n')
+  print(sort(table(RNAi)))
+  # change metadata to factor
+  RNAi = factor(RNAi,levels =c(controlID,setdiff(unique(RNAi),controlID)))
+  batchLabel = as.factor(batchLabel)
+  
+  # save data sets
+  save('input','RNAi','batchLabel',file = paste('outputs/cleaned_merged_raw_data_',plateID,'.Rdata',sep = ''))
+} 
 
