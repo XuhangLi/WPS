@@ -32,7 +32,7 @@ library(png)
 
 The following code uses a wrapper function to generate EDA plots for each condition. Please note that we offer this function just for the convenience to seamlessly analyze WPS data. Please feel free to perform the EDA/sample quality check in your own way!
 
-```{r}
+```{r }
 source('RNAi_QC_functions.R')
 
 # we use met7 as an example
@@ -54,9 +54,7 @@ A natural thought for bad quality samples are those appearing to be obviously di
 
 The figures are saved in a single output pdf: [met7_lib4_initial_EDA.pdf](figures/met7_lib4_initial_EDA.pdf)
 
-<iframe src="figures/met7_lib4_initial_EDA.pdf" style="width:800px; height:500px;" frameborder="0">
-
-</iframe>
+![](figures/met7_lib4_initial_EDA.pdf)
 
 **The EDA results include three plots for each condition versus control:**
 
@@ -69,7 +67,7 @@ An example of bad samples is *x.him_14_rep2* in met7-lib4. We noticed that it ap
 
 Notably, the frequency of bad samples is extremely low with our final WPS protocol. So, one should not expect removing many samples in the QC step. Instead, it is more for gaining confidence in the data and spot any unexpected phenomenon.
 
-### Labeling bad samples for exclusion 
+### Labeling bad samples for exclusion
 
 When inspecting the plots, one should interactively identify and label out the bad samples. These samples will be excluded in our next step of saving final cleaned dataset. For convenience, we also provide a wrapper function to seamlessly label out these samples.
 
