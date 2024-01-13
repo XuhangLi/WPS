@@ -18,7 +18,7 @@ To find out more details about **WPS**, please read our manuscript:
 
 # Table of contents
 1. [Dependencies](#dependencies-)
-2. [Quick Start](#quick-start)
+2. [Walkthrough](#walkthrough)
 3. [Contact](#contact)
 4. [Related Manuscripts](#related-manuscripts)
 
@@ -32,65 +32,25 @@ If you intend to process the raw data (e.g., aligning the reads to genome) manua
 * Python (what version?)
 * R (what verison?)
 
- 
+## Walkthrough<a name="walkthrough"></a>
 
+The pipeline includes three major steps: [step1_process_raw_dataalgorithm](1_iMAT++), [original iMAT algorithm](2_iMAT), [Flux Potential Analysis (FPA)](3_FPA), [metabolic distance calculator](MetabolicDistance), and [categorizer of gene expression data](CatExp). Please see the instruction within each module for running a test.
 
-``` python
+The followings are descriptions on each module (folder) listed.
 
-```
+[1_iMAT++](1_iMAT++): The iMAT++ module. This folder contains all the input, scripts and example codes for running the iMAT++ for <i>C. elegans</i> tissue-level integration and application on other models/datasets. 
 
-``` r
-if (!require("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("XuhangLi/wpsDE")
-```
+[2_iMAT](2_iMAT): The original iMAT module. This folder contains all the input, scripts and example codes for running the original iMAT for <i>C. elegans</i> tissue-level integration. 
 
-## Quick Start<a name="quick-start"></a>
+[3_FPA](3_FPA): The Flux Potential Analysis (FPA) module. This folder contains all the input, scripts and example codes for running the FPA for <i>C. elegans</i> tissue-level integration and application on other models/datasets. 
 
-The following code is a quick example of running the full **wpsDE**. The function `WPS_DE()` takes in a count table that is a gene-by-sample dataframe of read counts of the input dataset and a metadata table that is a dataframe with required metadata (such as covariates) to run DE analysis. For more details, please check on the help page by `?WPS_DE`. For a test run:
+[MetabolicDistance](MetabolicDistance): The metabolic distance calculator module. This folder contains all the input, scripts and example codes for calculating the metabolic distance for any metabolic network model. The output distance matrix is required to run FPA. The output for the <i>C. elegans</i> models used in the reference study are available in the pertaining folders. 
 
-``` r
-data("countTable")
-data("metaDataTable")
-result <- WPS_DE(countTable, metaDataTable)
-```
+[CatExp](CatExp): CatExp.py provides a set of functions for systematic categorization of gene expression levels. This folder also contains example inputs (gene expression datasets) and outputs (tables of categorized genes) used in the walkthrough help guide. The examples include the <i>C. elegans</i> tissue-level dataset used in the paper. 
 
-The required metadata of `WPS_DE()` includes the following columns:
+[bins](bins): The shared functions for running the above mentioned analysis. These functions include modified version of some COBRA Toolbox functions and common new functions such as a molecular weight calculator.
 
-- `sampleID`: unique IDs for each sample that correspond to the column names in countTable.
-- `covTreatment`: covariate indicating experimental treatments to be tested for (e.g., RNAi conditions). Must have a 'control' condition if control-dependent DE analysis is deisred.
-- `covBatch`: covariate indicating experimental batches, which by default is the replicate batch. Other reasonable batch labels within each library may also be used. 
-- `libID`: unique IDs for identifying the sequencing library of each sample. WPS DE analysis is first conducted at individual sequencing library level thus this ID is used to match samples pooled in the same library.
-
-The output of `WPS_DE()` is a list tables for the DE results of each condition. Key columns include: 
-
--   `log2FoldChange_raw`: log2FoldChange from DESeq2. Adding the suffix '_raw' is to emphasize this metric is directly from DESeq2 model without applying any shrinkage algorithm.
--   `DE_source`: The DE result for this gene is based on which type of DE analysis, either control-dependent (vs. control) or independent (vs. control-independent null).
--   `empirical_pvalue`: Empirical p-values based on corrected test statistic. This is the final DE testing p-value of WPS DE framework.
--   `FDR`: False Discovery Rate (FDR) of the DE test. This is the final DE testing FDR of WPS DE framework.
-
-It is notable that running full **wpsDE** analysis on a real data set (e.g., 10,000 genes x 100 conditions x 3 replicates) can be time consuming. It is expected to see prolonged run time up to several hours. We are working on integrating parallelization functions to increase the performance.
-
-
-For users interested in custom use of functionalities in **wpsDE**, the following code gives a quick example on two common applications:
-
-
-_To analyze the empirical null of a test statistic matrix, run_
-``` r
-data(example_stat_table)
-result <- fit_empirical_null(example_stat_table)
-```
-The test statistic matrix can by obtained from a user-defined DESeq2 analysis of their own data (using the `stat` column from DESeq2 output). The `result` object includes the empirical p-value matrix calculated from the input test statistic matrix. 
-
-
-
-_To perform control-independent DE analysis, run_
-``` r
-data(example_dds)
-adaZmat <- fit_main_population(example_dds)
-result <- control_independent_DE(example_dds, adaZmat)
-```
-The input `example_dds` is a DESeqDataSet objective that contains the input data. The DESeqDataSet should include specific covariate names, see details on the example data (`?example_dds`) for instructions. The returning object is a list of DE results for each conditions in the input DESeqDataSet.
+[input](input): The shared input for running the above mentioned analysis. These inputs include <i>C. elegans</i> metabolic model and other input information.
 
 
 ## Contact<a name="contact"></a>
