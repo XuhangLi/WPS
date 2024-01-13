@@ -17,19 +17,22 @@ To find out more details about **WPS**, please read our manuscript:
 
 
 # Table of contents
-1. [Installation](#installation-)
+1. [Dependencies](#dependencies-)
 2. [Quick Start](#quick-start)
 3. [Contact](#contact)
 4. [Related Manuscripts](#related-manuscripts)
 
 
-## Installation<a name="installation-"></a>
+## Dependencies<a name="dependencies"></a>
 
-WPS data processing involves multiple tools. We recommend setting up a local server or computational cluster for processing the data. 
+WPS data processing involves multiple tools and considerable computational power. We recommend setting up a local server or computational cluster for processing the data. 
 
-### raw data processing
-Raw data processing uses a pre-built dolphinNext pipeline for the ease of use and for easy management of large-scale data. Please register at [Via Foundry](https://viafoundry.umassmed.edu) before you start. 
-If you intend to process the raw data (e.g., aligning the reads to genome) manually, please see [1_process_the_raw_data](step1_process_raw_data/) for more information. We do not recommend this way for the sake of reproducibility and robustness. 
+* Via Foundry: the raw data processing uses a pre-built dolphinNext pipeline for the ease of use and for easy management of large-scale data. Please register at [Via Foundry](https://viafoundry.umassmed.edu) before you start. 
+If you intend to process the raw data (e.g., aligning the reads to genome) manually, please see [1_process_the_raw_data](step1_process_raw_data/) for more information (but you may need to install some dependencies that are not included in this list). We strongly recommend using the dolphinNext pipeline for the sake of reproducibility and robustness.
+* Python (what version?)
+* R (what verison?)
+
+ 
 
 
 ``` python
