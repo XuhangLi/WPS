@@ -22,13 +22,13 @@ check_and_install numpy
 
 # set parameters 
 
-outFileName="met7-lib2_sorted"
-inputBamFile="./../../step1_process_raw_data/output/star/met7-lib2_sorted.bam"
-RNAiBCsheet="./../../data/RNAiBCsheets_before_cleaning/RNAiBCsheet_met7_lib2.csv"
-ctrBamFile="bam_ctr/Dev_SS3_trim_read_sorted.bam"
-ctrBCsheet="bam_ctr/bcSet_full.txt"
-BCtoCorrect="bcSet_full.txt"
-G2Ttable="./../../data/metaData/WS279_G2Ttable.selected.txt"
+outFileName="met7-lib2_sorted" # prefix of the output files. For standard WPS, please use the input bam file name
+inputBamFile="./../../step1_process_raw_data/output/star/met7-lib2_sorted.bam" # path to the input bam file for the RNAi library to be analyzed
+RNAiBCsheet="./../../data/RNAiBCsheets_before_cleaning/RNAiBCsheet_met7_lib2.csv" # corresponding RNAiBCsheet produced in the previous step.
+ctrBamFile="bam_ctr/Dev_SS3_trim_read_sorted.bam" # no-RNAi control bam file. If no custom file available, you can use the same control file here.
+ctrBCsheet="bam_ctr/bcSet_full.txt" # all barcodes in the control bam file
+BCtoCorrect="bcSet_full.txt" # barcodes in the input bam file that we want to correct on. We recommend including all possible barcodes. 
+G2Ttable="./../../data/metaData/WS279_G2Ttable.selected.txt" # the Gene-to-transcript table generated in the previous raw data processing step
 
 echo ${inputBamFile} > BamToCorrect.txt 
 awk -F, '$2!="X"' "$RNAiBCsheet" > "trimmedRNAiBCsheet.csv"
