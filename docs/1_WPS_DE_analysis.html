@@ -391,21 +391,435 @@ load(&#39;./../step2_quality_control/outputs/cleaned_merged_raw_data_met7.Rdata&
 rep_batch = colnames(input)
 rep_batch = str_extract(rep_batch,&#39;rep._met[0-9]+_&#39;)
 rep_batch = str_replace(rep_batch,&#39;_met._$&#39;,&#39;&#39;)
-rep_batch = as.factor(rep_batch)
 RNAi = as.character(RNAi)      
 RNAi[RNAi == &#39;x.vector&#39;] = &#39;control&#39;
-rep_batch = as.character(rep_batch)
 batchLabel = as.character(batchLabel)
 
 metaDataTable = data.frame(sampleID = colnames(input),
                            covTreatment = RNAi,
-                           covBatch = rep_batch, # WPS DE starts with per-library DE, so the actual                                                     bacth covariates are replicate batches!
+                           covBatch = rep_batch, # WPS DE starts with per-library DE, so the actual                                                     batch covariates are replicate batches!
                            libID = batchLabel
                            )
 
-res = WPS_DE(input, metaDataTable)
-
-# the DE tables are in res. See WPS_DE help document for details.</code></pre>
+res = WPS_DE(input, metaDataTable)</code></pre>
+<pre><code>## [31mStarting control-(in)dependent DE analysis per library ...[39m
+## Performing control-dependent DE analysis for library met7_lib1 
+## Performing control-independent DE analysis for library met7_lib1 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.51208716377256% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.957&quot;
+## [1] &quot;poor fit: 0.043&quot;
+## [1] &quot;AdaTiss fitting ... 17.0241743275451% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9605&quot;
+## [1] &quot;poor fit: 0.0395&quot;
+## [1] &quot;AdaTiss fitting ... 25.5362614913177% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.958333333333333&quot;
+## [1] &quot;poor fit: 0.0416666666666667&quot;
+## [1] &quot;AdaTiss fitting ... 34.0483486550902% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9625&quot;
+## [1] &quot;poor fit: 0.0375&quot;
+## [1] &quot;AdaTiss fitting ... 42.5604358188628% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9624&quot;
+## [1] &quot;poor fit: 0.0376&quot;
+## [1] &quot;AdaTiss fitting ... 51.0725229826353% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.959833333333333&quot;
+## [1] &quot;poor fit: 0.0401666666666667&quot;
+## [1] &quot;AdaTiss fitting ... 59.5846101464079% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.960714285714286&quot;
+## [1] &quot;poor fit: 0.0392857142857143&quot;
+## [1] &quot;AdaTiss fitting ... 68.0966973101805% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96175&quot;
+## [1] &quot;poor fit: 0.03825&quot;
+## [1] &quot;AdaTiss fitting ... 76.608784473953% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961222222222222&quot;
+## [1] &quot;poor fit: 0.0387777777777778&quot;
+## [1] &quot;AdaTiss fitting ... 85.1208716377256% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9615&quot;
+## [1] &quot;poor fit: 0.0385&quot;
+## [1] &quot;AdaTiss fitting ... 93.6329588014981% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.962272727272727&quot;
+## [1] &quot;poor fit: 0.0377272727272727&quot;
+## Runing DEseq2 again ...
+## Performing control-dependent DE analysis for library met7_lib2 
+## Performing control-independent DE analysis for library met7_lib2 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.42034355001684% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.966&quot;
+## [1] &quot;poor fit: 0.034&quot;
+## [1] &quot;AdaTiss fitting ... 16.8406871000337% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.969&quot;
+## [1] &quot;poor fit: 0.031&quot;
+## [1] &quot;AdaTiss fitting ... 25.2610306500505% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.964666666666667&quot;
+## [1] &quot;poor fit: 0.0353333333333333&quot;
+## [1] &quot;AdaTiss fitting ... 33.6813742000674% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9595&quot;
+## [1] &quot;poor fit: 0.0405&quot;
+## [1] &quot;AdaTiss fitting ... 42.1017177500842% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9604&quot;
+## [1] &quot;poor fit: 0.0396&quot;
+## [1] &quot;AdaTiss fitting ... 50.522061300101% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.958666666666667&quot;
+## [1] &quot;poor fit: 0.0413333333333333&quot;
+## [1] &quot;AdaTiss fitting ... 58.9424048501179% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.959571428571429&quot;
+## [1] &quot;poor fit: 0.0404285714285714&quot;
+## [1] &quot;AdaTiss fitting ... 67.3627484001347% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.959375&quot;
+## [1] &quot;poor fit: 0.040625&quot;
+## [1] &quot;AdaTiss fitting ... 75.7830919501516% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.958555555555556&quot;
+## [1] &quot;poor fit: 0.0414444444444444&quot;
+## [1] &quot;AdaTiss fitting ... 84.2034355001684% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9586&quot;
+## [1] &quot;poor fit: 0.0414&quot;
+## [1] &quot;AdaTiss fitting ... 92.6237790501852% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.958181818181818&quot;
+## [1] &quot;poor fit: 0.0418181818181818&quot;
+## Runing DEseq2 again ...
+## Performing control-dependent DE analysis for library met7_lib3 
+## Performing control-independent DE analysis for library met7_lib3 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.38433805651044% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961&quot;
+## [1] &quot;poor fit: 0.039&quot;
+## [1] &quot;AdaTiss fitting ... 16.7686761130209% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9605&quot;
+## [1] &quot;poor fit: 0.0395&quot;
+## [1] &quot;AdaTiss fitting ... 25.1530141695313% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.958666666666667&quot;
+## [1] &quot;poor fit: 0.0413333333333333&quot;
+## [1] &quot;AdaTiss fitting ... 33.5373522260418% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961&quot;
+## [1] &quot;poor fit: 0.039&quot;
+## [1] &quot;AdaTiss fitting ... 41.9216902825522% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96&quot;
+## [1] &quot;poor fit: 0.04&quot;
+## [1] &quot;AdaTiss fitting ... 50.3060283390626% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.959833333333333&quot;
+## [1] &quot;poor fit: 0.0401666666666667&quot;
+## [1] &quot;AdaTiss fitting ... 58.6903663955731% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.960571428571429&quot;
+## [1] &quot;poor fit: 0.0394285714285714&quot;
+## [1] &quot;AdaTiss fitting ... 67.0747044520835% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96025&quot;
+## [1] &quot;poor fit: 0.03975&quot;
+## [1] &quot;AdaTiss fitting ... 75.459042508594% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.959666666666667&quot;
+## [1] &quot;poor fit: 0.0403333333333333&quot;
+## [1] &quot;AdaTiss fitting ... 83.8433805651044% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9602&quot;
+## [1] &quot;poor fit: 0.0398&quot;
+## [1] &quot;AdaTiss fitting ... 92.2277186216148% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96&quot;
+## [1] &quot;poor fit: 0.04&quot;
+## Runing DEseq2 again ...
+## Performing control-dependent DE analysis for library met7_lib4 
+## Performing control-independent DE analysis for library met7_lib4 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.72676498821887% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.968&quot;
+## [1] &quot;poor fit: 0.032&quot;
+## [1] &quot;AdaTiss fitting ... 17.4535299764377% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.968&quot;
+## [1] &quot;poor fit: 0.032&quot;
+## [1] &quot;AdaTiss fitting ... 26.1802949646566% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.963&quot;
+## [1] &quot;poor fit: 0.037&quot;
+## [1] &quot;AdaTiss fitting ... 34.9070599528755% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96275&quot;
+## [1] &quot;poor fit: 0.03725&quot;
+## [1] &quot;AdaTiss fitting ... 43.6338249410943% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9614&quot;
+## [1] &quot;poor fit: 0.0386&quot;
+## [1] &quot;AdaTiss fitting ... 52.3605899293132% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96&quot;
+## [1] &quot;poor fit: 0.04&quot;
+## [1] &quot;AdaTiss fitting ... 61.0873549175321% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.960857142857143&quot;
+## [1] &quot;poor fit: 0.0391428571428571&quot;
+## [1] &quot;AdaTiss fitting ... 69.8141199057509% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9605&quot;
+## [1] &quot;poor fit: 0.0395&quot;
+## [1] &quot;AdaTiss fitting ... 78.5408848939698% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961111111111111&quot;
+## [1] &quot;poor fit: 0.0388888888888889&quot;
+## [1] &quot;AdaTiss fitting ... 87.2676498821887% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9624&quot;
+## [1] &quot;poor fit: 0.0376&quot;
+## [1] &quot;AdaTiss fitting ... 95.9944148704075% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.962363636363636&quot;
+## [1] &quot;poor fit: 0.0376363636363636&quot;
+## Runing DEseq2 again ...
+## Performing control-dependent DE analysis for library met7_lib5 
+## Performing control-independent DE analysis for library met7_lib5 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.74737578726382% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.962&quot;
+## [1] &quot;poor fit: 0.038&quot;
+## [1] &quot;need further check on the fitting&quot;
+## [1] &quot;AdaTiss fitting ... 17.4947515745276% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961&quot;
+## [1] &quot;poor fit: 0.039&quot;
+## [1] &quot;AdaTiss fitting ... 26.2421273617915% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961666666666667&quot;
+## [1] &quot;poor fit: 0.0383333333333333&quot;
+## [1] &quot;AdaTiss fitting ... 34.9895031490553% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.96275&quot;
+## [1] &quot;poor fit: 0.03725&quot;
+## [1] &quot;AdaTiss fitting ... 43.7368789363191% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9614&quot;
+## [1] &quot;poor fit: 0.0386&quot;
+## [1] &quot;AdaTiss fitting ... 52.4842547235829% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961333333333333&quot;
+## [1] &quot;poor fit: 0.0386666666666667&quot;
+## [1] &quot;AdaTiss fitting ... 61.2316305108467% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961285714285714&quot;
+## [1] &quot;poor fit: 0.0387142857142857&quot;
+## [1] &quot;AdaTiss fitting ... 69.9790062981106% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961625&quot;
+## [1] &quot;poor fit: 0.038375&quot;
+## [1] &quot;AdaTiss fitting ... 78.7263820853744% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.962111111111111&quot;
+## [1] &quot;poor fit: 0.0378888888888889&quot;
+## [1] &quot;AdaTiss fitting ... 87.4737578726382% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9624&quot;
+## [1] &quot;poor fit: 0.0376&quot;
+## [1] &quot;AdaTiss fitting ... 96.221133659902% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.962454545454545&quot;
+## [1] &quot;poor fit: 0.0375454545454545&quot;
+## Runing DEseq2 again ...
+## Performing control-dependent DE analysis for library met7_lib6 
+## Performing control-independent DE analysis for library met7_lib6 
+## Fit main populations ...
+## [1] &quot;AdaTiss fitting ... 8.36470096194061% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.961&quot;
+## [1] &quot;poor fit: 0.039&quot;
+## [1] &quot;AdaTiss fitting ... 16.7294019238812% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9565&quot;
+## [1] &quot;poor fit: 0.0435&quot;
+## [1] &quot;AdaTiss fitting ... 25.0941028858218% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.954&quot;
+## [1] &quot;poor fit: 0.046&quot;
+## [1] &quot;AdaTiss fitting ... 33.4588038477624% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9525&quot;
+## [1] &quot;poor fit: 0.0475&quot;
+## [1] &quot;AdaTiss fitting ... 41.8235048097031% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9514&quot;
+## [1] &quot;poor fit: 0.0486&quot;
+## [1] &quot;need further check on the fitting&quot;
+## [1] &quot;AdaTiss fitting ... 50.1882057716437% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.951&quot;
+## [1] &quot;poor fit: 0.049&quot;
+## [1] &quot;AdaTiss fitting ... 58.5529067335843% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.949714285714286&quot;
+## [1] &quot;poor fit: 0.0502857142857143&quot;
+## [1] &quot;AdaTiss fitting ... 66.9176076955249% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9505&quot;
+## [1] &quot;poor fit: 0.0495&quot;
+## [1] &quot;AdaTiss fitting ... 75.2823086574655% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.950777777777778&quot;
+## [1] &quot;poor fit: 0.0492222222222222&quot;
+## [1] &quot;AdaTiss fitting ... 83.6470096194061% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.9516&quot;
+## [1] &quot;poor fit: 0.0484&quot;
+## [1] &quot;AdaTiss fitting ... 92.0117105813467% (this may take a long time)&quot;
+## [1] &quot;normal fit: 0.952272727272727&quot;
+## [1] &quot;poor fit: 0.0477272727272727&quot;
+## Runing DEseq2 again ...
+## [31mCombining the two per library DE analysis...[39m
+## At cutoff 0.005, 0 core control-outlier genes identifiedProcessing  met7_lib1 
+## 0.2% genes used control-independent DE results
+## Processing  met7_lib2 
+## 0.2% genes used control-independent DE results
+## Processing  met7_lib3 
+## 0.2% genes used control-independent DE results
+## Processing  met7_lib4 
+## 0.3% genes used control-independent DE results
+## Processing  met7_lib5 
+## 0.4% genes used control-independent DE results
+## Processing  met7_lib6 
+## 1% genes used control-independent DE results
+## [31mCorrecting test statistics based on emprical null...[39m
+## [31mCAUTION: Most genes were not detected in more than 100 conditions![39m
+## Filtering at minimal 85 conditions ...
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00000987&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00000988&quot;
+## [1] &quot;fitting #100 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00000479&quot;
+## [1] &quot;fitting #200 gene.&quot;
+## [1] &quot;fitting #300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00009201&quot;
+## [1] &quot;fitting #400 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00021596&quot;
+## [1] &quot;fitting #500 gene.&quot;
+## [1] &quot;fitting #600 gene.&quot;
+## [1] &quot;fitting #700 gene.&quot;
+## [1] &quot;fitting #800 gene.&quot;
+## [1] &quot;fitting #900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00017498&quot;
+## [1] &quot;fitting #1000 gene.&quot;
+## [1] &quot;fitting #1100 gene.&quot;
+## [1] &quot;fitting #1200 gene.&quot;
+## [1] &quot;fitting #1300 gene.&quot;
+## [1] &quot;fitting #1400 gene.&quot;
+## [1] &quot;fitting #1500 gene.&quot;
+## [1] &quot;fitting #1600 gene.&quot;
+## [1] &quot;fitting #1700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00007640&quot;
+## [1] &quot;fitting #1800 gene.&quot;
+## [1] &quot;fitting #1900 gene.&quot;
+## [1] &quot;fitting #2000 gene.&quot;
+## [1] &quot;fitting #2100 gene.&quot;
+## [1] &quot;fitting #2200 gene.&quot;
+## [1] &quot;fitting #2300 gene.&quot;
+## [1] &quot;fitting #2400 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00019541&quot;
+## [1] &quot;fitting #2500 gene.&quot;
+## [1] &quot;fitting #2600 gene.&quot;
+## [1] &quot;fitting #2700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00001564&quot;
+## [1] &quot;fitting #2800 gene.&quot;
+## [1] &quot;fitting #2900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00020938&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00003767&quot;
+## [1] &quot;fitting #3000 gene.&quot;
+## [1] &quot;fitting #3100 gene.&quot;
+## [1] &quot;fitting #3200 gene.&quot;
+## [1] &quot;fitting #3300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00015044&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00003474&quot;
+## [1] &quot;fitting #3400 gene.&quot;
+## [1] &quot;fitting #3500 gene.&quot;
+## [1] &quot;fitting #3600 gene.&quot;
+## [1] &quot;fitting #3700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00013167&quot;
+## [1] &quot;fitting #3800 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00022134&quot;
+## [1] &quot;fitting #3900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00022448&quot;
+## [1] &quot;fitting #4000 gene.&quot;
+## [1] &quot;fitting #4100 gene.&quot;
+## [1] &quot;fitting #4200 gene.&quot;
+## [1] &quot;fitting #4300 gene.&quot;
+## [1] &quot;fitting #4400 gene.&quot;
+## [1] &quot;fitting #4500 gene.&quot;
+## [1] &quot;fitting #4600 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00013739&quot;
+## [1] &quot;fitting #4700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00013530&quot;
+## [1] &quot;fitting #4800 gene.&quot;
+## [1] &quot;fitting #4900 gene.&quot;
+## [1] &quot;fitting #5000 gene.&quot;
+## [1] &quot;fitting #5100 gene.&quot;
+## [1] &quot;fitting #5200 gene.&quot;
+## [1] &quot;fitting #5300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00010958&quot;
+## [1] &quot;fitting #5400 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00020183&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00021810&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00021813&quot;
+## [1] &quot;fitting #5500 gene.&quot;
+## [1] &quot;fitting #5600 gene.&quot;
+## [1] &quot;fitting #5700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00022750&quot;
+## [1] &quot;fitting #5800 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00017303&quot;
+## [1] &quot;fitting #5900 gene.&quot;
+## [1] &quot;fitting #6000 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00010962&quot;
+## [1] &quot;fitting #6100 gene.&quot;
+## [1] &quot;fitting #6200 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00001320&quot;
+## [1] &quot;fitting #6300 gene.&quot;
+## [1] &quot;fitting #6400 gene.&quot;
+## [1] &quot;fitting #6500 gene.&quot;
+## [1] &quot;fitting #6600 gene.&quot;
+## [1] &quot;fitting #6700 gene.&quot;
+## [1] &quot;fitting #6800 gene.&quot;
+## [1] &quot;fitting #6900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00013268&quot;
+## [1] &quot;fitting #7000 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00016020&quot;
+## [1] &quot;fitting #7100 gene.&quot;
+## [1] &quot;fitting #7200 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00021714&quot;
+## [1] &quot;fitting #7300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00001829&quot;
+## [1] &quot;fitting #7400 gene.&quot;
+## [1] &quot;fitting #7500 gene.&quot;
+## [1] &quot;fitting #7600 gene.&quot;
+## [1] &quot;fitting #7700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00018423&quot;
+## [1] &quot;fitting #7800 gene.&quot;
+## [1] &quot;fitting #7900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00011045&quot;
+## [1] &quot;fitting #8000 gene.&quot;
+## [1] &quot;fitting #8100 gene.&quot;
+## [1] &quot;fitting #8200 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00012140&quot;
+## [1] &quot;fitting #8300 gene.&quot;
+## [1] &quot;fitting #8400 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00019978&quot;
+## [1] &quot;fitting #8500 gene.&quot;
+## [1] &quot;fitting #8600 gene.&quot;
+## [1] &quot;fitting #8700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00012676&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00012678&quot;
+## [1] &quot;fitting #8800 gene.&quot;
+## [1] &quot;fitting #8900 gene.&quot;
+## [1] &quot;fitting #9000 gene.&quot;
+## [1] &quot;fitting #9100 gene.&quot;
+## [1] &quot;fitting #9200 gene.&quot;
+## [1] &quot;fitting #9300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00017501&quot;
+## [1] &quot;fitting #9400 gene.&quot;
+## [1] &quot;fitting #9500 gene.&quot;
+## [1] &quot;fitting #9600 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00021647&quot;
+## [1] &quot;fitting #9700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00002004&quot;
+## [1] &quot;fitting #9800 gene.&quot;
+## [1] &quot;fitting #9900 gene.&quot;
+## [1] &quot;fitting #10000 gene.&quot;
+## [1] &quot;fitting #10100 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00011959&quot;
+## [1] &quot;fitting #10200 gene.&quot;
+## [1] &quot;fitting #10300 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00007624&quot;
+## [1] &quot;fitting #10400 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00015400&quot;
+## [1] &quot;fitting #10500 gene.&quot;
+## [1] &quot;fitting #10600 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00010623&quot;
+## [1] &quot;fitting #10700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00022644&quot;
+## [1] &quot;fitting #10800 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00004703&quot;
+## [1] &quot;fitting #10900 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00018237&quot;
+## [1] &quot;fitting #11000 gene.&quot;
+## [1] &quot;fitting #11100 gene.&quot;
+## [1] &quot;fitting #11200 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00018921&quot;
+## [1] &quot;fitting #11300 gene.&quot;
+## [1] &quot;fitting #11400 gene.&quot;
+## [1] &quot;fitting #11500 gene.&quot;
+## [1] &quot;fitting #11600 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00001154&quot;
+## [1] &quot;fitting #11700 gene.&quot;
+## [1] &quot;maximum break tuning step reaches, using median/mad ...  WBGene00044067&quot;
+## [1] &quot;fitting #11800 gene.&quot;
+## [1] &quot;fitting #11900 gene.&quot;
+## [1] &quot;fitting #12000 gene.&quot;
+## [1] &quot;fitting #12100 gene.&quot;
+## [1] &quot;fitting #12200 gene.&quot;
+## [1] &quot;fitting #12300 gene.&quot;
+## [1] &quot;fitting #12400 gene.&quot;
+## [1] &quot;fitting #12500 gene.&quot;
+## [1] &quot;fitting #12600 gene.&quot;
+## [1] &quot;fitting #12700 gene.&quot;</code></pre>
+<pre class="r"><code># the DE tables are in res. See WPS_DE help document for details.</code></pre>
 <p>Because of the large scale of the dataset, DE analysis can take a few
 hours. We will release a parallelization function soon to increase the
 speed.</p>
