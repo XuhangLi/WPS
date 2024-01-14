@@ -1,7 +1,7 @@
 # Run dsRNA analysis
 This is a walkthrough to execute dsRNA analysis using in-house Python scripts. The inputs needed for this analysis are generated in the previous steps of the pipeline. Please note, if you change the location of any files produced by the previous steps, you may encounter errors or need to modify the input paths manually.
 
-### programs
+### Programs
 There are three python scripts for this analysis, including:
 * **correct_dsRNA.py**: this script corrects the dsRNA contaminations on gene expression quantification. It generates a recounted read count table for contaminated genes in a given library. 
 * **count_dsRNA.py**: this script quantifies the dsRNA read counts for both target genes in a libary and other user-supplied genes that can be potential swapped clones.
