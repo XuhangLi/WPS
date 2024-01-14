@@ -51,8 +51,8 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
 
   # correct for dsRNA contamination
   # ignore the met1_lib1 suffix in the variable name. Not meaningful!
-  ToCorrect_met1_lib = read.table(paste('./../step1_process_raw_data/output/RNAiAnalysis_',status,'/',
-                                        expID,'-',libID,'_sorted_corrected_uniqOnly__',expID,'-',libID,'_sorted.bam.csv',sep = ''),header = T,row.names = 1,sep = ',')
+  ToCorrect_met1_lib = read.table(paste('./2_dsRNAi_analysis/outputs/RNAiAnalysis_',status,'/',
+                                        expID,'-',libID,'_sorted_recount_matrix.csv',sep = ''),header = T,row.names = 1,sep = ',')
   colnames(ToCorrect_met1_lib) = sampleSheet$V2[match(colnames(ToCorrect_met1_lib), sampleSheet$V1)]
   # remove NAs (they are empty barcodes)
   if (sum(is.na(colnames(ToCorrect_met1_lib))) >0){
@@ -277,8 +277,8 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   
   
   # next, plot the detection of dsRNA signals (as FC against background)
-  dsRNA = read.csv(paste('./../step1_process_raw_data/output/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_corrected_uniqOnly__dsRNA_count.csv',sep = ''),header = F)
-  dsRNA_ctr = read.csv(paste('./../step1_process_raw_data/output/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_corrected_uniqOnly__dsRNA_count_ctr.csv',sep = ''),header = F)
+  dsRNA = read.csv(paste('./2_dsRNAi_analysis/outputs/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_target_dsRNA_count.csv',sep = ''),header = F)
+  dsRNA_ctr = read.csv(paste('./2_dsRNAi_analysis/outputs/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_ctr_dsRNA_count.csv',sep = ''),header = F)
   # add one pseudocount to the read count to avoid errors in FC calculation 
   dsRNA_ctr$V2 = dsRNA_ctr$V2+1 
   
@@ -346,7 +346,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   close(fileConn)
   
   # finally, detect the cross-contamination of dsRNA by ploting the dsRNA heatmap
-  dsRNA_met1 = read.csv(paste('./../step1_process_raw_data/output/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_dsRNA__',expID,'-',libID,'_sorted.bam_dsRNAcount.csv',sep = ''),row.names = 1)
+  dsRNA_met1 = read.csv(paste('./2_dsRNAi_analysis/outputs/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_dsRNA_count_matrix.csv',sep = ''),row.names = 1)
   colnames(dsRNA_met1) = sampleSheet$V2[match(colnames(dsRNA_met1), sampleSheet$V1)]
   if (sum(is.na(colnames(dsRNA_met1))) >0){
     dsRNA_met1 = dsRNA_met1[,-which(is.na(colnames(dsRNA_met1)))]
@@ -364,7 +364,7 @@ RNAi_QC <- function(expID, libID, vectorSamples, status, ctr_bam_depth){
   dsRNA_met1_cpm = sweep(dsRNA_met1, 2,colSums(readsCount[,colnames(dsRNA_met1)])/1e6,'/') 
   
   # control bam file cpm
-  dsRNA_bg_met1 = read.csv(paste('./../step1_process_raw_data/output/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_dsRNA__dsRNA_count_whole_ctrBAM.csv',sep = ''),row.names = 1,header = F)
+  dsRNA_bg_met1 = read.csv(paste('./2_dsRNAi_analysis/outputs/RNAiAnalysis_',status,'/',expID,'-',libID,'_sorted_ctr_dsRNA_count_expanded.csv',sep = ''),row.names = 1,header = F)
   dsRNA_bg_met1_cpm = (dsRNA_bg_met1) / ctr_bam_depth * 1e6 
   rownames(dsRNA_bg_met1_cpm) = paste(str_replace(WBID$Public.Name[match(rownames(dsRNA_bg_met1_cpm), WBID$WormBase.Gene.ID)],'-','_'),sep = '')
   

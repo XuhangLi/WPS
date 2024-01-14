@@ -19,7 +19,7 @@ This tutorial gives a template to quickly setup a WPS DE analysis with the clean
 
 ```{r, results = 'hide', message = FALSE, warning = FALSE}
 
-# install WPS DE if not in your environment
+# # install WPS DE if not in your environment
 # if (!require("devtools", quietly = TRUE)){
 #   install.packages("devtools")
 # }
@@ -51,6 +51,8 @@ metaDataTable = data.frame(sampleID = colnames(input),
                            )
 
 res = WPS_DE(input, metaDataTable)
+
+# the DE tables are in res. See WPS_DE help document for details.
 
 ```
 Because of the large scale of the dataset, DE analysis can take a few hours. We will release a parallelization function soon to increase the speed.
