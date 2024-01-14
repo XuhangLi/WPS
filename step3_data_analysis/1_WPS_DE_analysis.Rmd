@@ -17,7 +17,7 @@ This tutorial gives a template to quickly setup a WPS DE analysis with the clean
 
 ### Required packages
 
-```{r, results = 'hide', message = FALSE, warning = FALSE}
+```{r message=FALSE, warning=FALSE, results='hide'}
 
 # # install WPS DE if not in your environment
 # if (!require("devtools", quietly = TRUE)){
@@ -34,7 +34,7 @@ library(stringr)
 
 WPS DE package is highly integrated with processing WPS dataset. So, running it is straightforward. Let's use met7 data as an example. For running WPS DE, please merge all the data you have if you collect more than one RNAi plate!
 
-```{r fig.show='hide', message=FALSE, results='hide'}
+```{r}
 # load data
 load('./../step2_quality_control/outputs/cleaned_merged_raw_data_met7.Rdata')
 
@@ -42,11 +42,13 @@ load('./../step2_quality_control/outputs/cleaned_merged_raw_data_met7.Rdata')
 rep_batch = colnames(input)
 rep_batch = str_extract(rep_batch,'rep._met[0-9]+_')
 rep_batch = str_replace(rep_batch,'_met._$','')
-rep_batch = as.factor(rep_batch)
-      
+RNAi = as.character(RNAi)      
+RNAi[RNAi == 'x.vector'] = 'control'
+batchLabel = as.character(batchLabel)
+
 metaDataTable = data.frame(sampleID = colnames(input),
                            covTreatment = RNAi,
-                           covBatch = rep_batch, # WPS DE starts with per-library DE, so the actual                                                     bacth covariates are replicate batches!
+                           covBatch = rep_batch, # WPS DE starts with per-library DE, so the actual                                                     batch covariates are replicate batches!
                            libID = batchLabel
                            )
 
