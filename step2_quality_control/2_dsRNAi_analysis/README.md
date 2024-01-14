@@ -35,5 +35,5 @@ The parameters are explained by the comments in these bash scripts.
 * met7-lib2_sorted_ctr_dsRNA_count_expanded.csv: the dsRNA read counts of all specified genes in the input _RNAiBCtable_, but using library-wise total count in the no-RNAi control library.
 
 ### Organizing files
-In real data analysis, one should move these five files to [/outputs/RNAiAnalysis_before_cleaning/](/outputs/RNAiAnalysis_before_cleaning/) (or to [/outputs/RNAiAnalysis_after_cleaning/](/outputs/RNAiAnalysis_after_cleaning/) if it is a rerun after updating the bad clones). Files in these folder will be identified automatically in the next-step RNAi quality control. 
+In real data analysis, one should move these five files to [/outputs/RNAiAnalysis_before_cleaning/](./outputs/RNAiAnalysis_before_cleaning/) (or to [/outputs/RNAiAnalysis_after_cleaning/](./outputs/RNAiAnalysis_after_cleaning/) if it is a rerun after updating the bad clones). Files in these folder will be identified automatically in the next-step RNAi quality control. 
 
