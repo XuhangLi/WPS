@@ -1,0 +1,3 @@
+[submodule "step1_process_raw_data/dolphinNext_Pipeline"]
+	path = step1_process_raw_data/dolphinNext_Pipeline
+	url = https://github.com/XuhangLi/cellSeq_Pipeline.git
