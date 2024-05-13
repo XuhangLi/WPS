@@ -46,7 +46,7 @@ The followings are descriptions on each major step:
 
 ## Contact<a name="contact"></a>
 
-Any questions or suggestions on `WPS` are welcomed! Please report it on [issues](https://github.com/XuhangLi/WPS/issues), or contact Xuhang Li ([xuhang.li\@umassmed.edu](mailto:xuhang.li@umassmed.edu){.email}).
+Any questions or suggestions on `WPS` are welcomed! Please report it on [issues](https://github.com/XuhangLi/WPS/issues), or contact Xuhang Li ([xuhang.li@umassmed.edu](mailto:xuhang.li@umassmed.edu)).
 
 ## Related Manuscripts<a name="related-manuscripts"></a>
 -  **WPS** technology is the foundation method of three back-to-back papers. For further reading, please see: 
