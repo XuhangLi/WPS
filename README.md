@@ -12,7 +12,7 @@ This repository details the procedures to process WPS data, starting from fastq 
 
 To find out more details about **WPS**, please read our manuscript:
 
-[Title and authors](https://bioRxiv_link)
+[Worm Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq, Hefei Zhang#, Xuhang Li#, Dongyuan Song, Onur Yukselen, Shivani Nanda, Alper Kucukural, Jingyi Jessica Li, Manuel Garber & Albertha J. M. Walhout](https://www.nature.com/articles/s41467-025-60154-0)
 
 
 # Table of contents
@@ -51,7 +51,7 @@ Any questions or suggestions on `WPS` are welcomed! Please report it on [issues]
 ## Related Manuscripts<a name="related-manuscripts"></a>
 -  **WPS** technology is the foundation method of three back-to-back papers. For further reading, please see: 
     -   **WPS method paper**: [Worm
-Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq. <em>Nature Communications, in press</em> (2025).]([available at Preprint server](https://www.biorxiv.org/content/10.1101/2025.02.02.636107v1))
+Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq. <em>Nature Communications </em> (2025).]([available here](https://www.nature.com/articles/s41467-025-60154-0))
     -   **Metabolic rewiring story**: [Systems-level design
 principles of metabolic rewiring in an animal. <em>Nature</em> (2025).]([online link](https://www.nature.com/articles/s41586-025-08636-5))
     -   **Metabolic wiring story**: [A systems-level,
