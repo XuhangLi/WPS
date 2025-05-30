@@ -12,7 +12,7 @@ This repository details the procedures to process WPS data, starting from fastq 
 
 To find out more details about **WPS**, please read our manuscript:
 
-[Worm Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq, Hefei Zhang#, Xuhang Li#, Dongyuan Song, Onur Yukselen, Shivani Nanda, Alper Kucukural, Jingyi Jessica Li, Manuel Garber & Albertha J. M. Walhout](https://www.nature.com/articles/s41467-025-60154-0)
+**Worm Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq** Hefei Zhang#, Xuhang Li#, Dongyuan Song, Onur Yukselen, Shivani Nanda, Alper Kucukural, Jingyi Jessica Li, Manuel Garber & Albertha J. M. Walhout [available here](https://www.nature.com/articles/s41467-025-60154-0)
 
 
 # Table of contents
