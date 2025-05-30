@@ -51,12 +51,12 @@ Any questions or suggestions on `WPS` are welcomed! Please report it on [issues]
 
 ## Related Manuscripts<a name="related-manuscripts"></a>
 -  **WPS** technology is the foundation method of three back-to-back papers. For further reading, please see: 
-    -   **WPS method paper**: [Worm
-Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq. <em>Nature Communications </em> (2025).]([available here](https://www.nature.com/articles/s41467-025-60154-0))
-    -   **Metabolic rewiring story**: [Systems-level design
-principles of metabolic rewiring in an animal. <em>Nature</em> (2025).]([online link](https://www.nature.com/articles/s41586-025-08636-5))
-    -   **Metabolic wiring story**: [A systems-level,
-semi-quantitative landscape of metabolic flux in C. elegans. <em>Nature</em> (2025).]([online link](https://www.nature.com/articles/s41586-025-08635-6))
+    -   **WPS method paper**: Worm
+Perturb-Seq: massively parallel whole-animal RNAi and RNA-seq. <em>Nature Communications </em> (2025).([available here](https://www.nature.com/articles/s41467-025-60154-0))
+    -   **Metabolic rewiring story**: Systems-level design
+principles of metabolic rewiring in an animal. <em>Nature</em> (2025).([online link](https://www.nature.com/articles/s41586-025-08636-5))
+    -   **Metabolic wiring story**: A systems-level,
+semi-quantitative landscape of metabolic flux in C. elegans. <em>Nature</em> (2025).([online link](https://www.nature.com/articles/s41586-025-08635-6))
 
 ## Acknowledgement
 We thank members of the Walhout lab, Mike Lee, and Chad Myers for discussion and critical reading of the manuscript. We thank former Garber lab members, Kyle Gellatly and Rachel Murphy, for their help in the early stage of this project. This work was supported by grants from the National Institutes of Health GM122502 and DK068429 to A.J.M.W., U01HG012064 to M.G., and NSF DBI-1846216 and NIGMS R35GM140888 to J.J.L.
